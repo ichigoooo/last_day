@@ -14,6 +14,7 @@ public partial class DeathScreen : Control
 
 	private async void RunSequenceAsync()
 	{
+		AudioManager.Instance?.PlaySfx(AudioManager.SfxHeartbeatFade);
 		var overlay = new ColorRect
 		{
 			Color = Colors.Black,

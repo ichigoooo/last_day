@@ -83,7 +83,16 @@ public partial class MeditationScreen : Control
 		row.AddChild(next);
 		v.AddChild(row);
 
+		var tick = new Timer { WaitTime = 3.0, Autostart = true, OneShot = false };
+		AddChild(tick);
+		tick.Timeout += OnMeditationAmbientTick;
+
 		Callable.From(() => RunAsync(body, edit, skip, next)).CallDeferred();
+	}
+
+	private void OnMeditationAmbientTick()
+	{
+		AudioManager.Instance?.PlaySfx(AudioManager.SfxMeditationTick);
 	}
 
 	private async void RunAsync(Label body, LineEdit edit, Button skip, Button next)

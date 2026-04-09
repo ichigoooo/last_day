@@ -6,7 +6,7 @@
         "/Users/wuyuheng/Documents/Projects/RedHackathon/red-hackathon/godot-mcp-pro-v1.10.1/server/build/index.js"
       ],
       "env": {
-        "GODOT_MCP_PORT": "6505"
+        "GODOT_MCP_PORT": "6506"
       }
     }
   }

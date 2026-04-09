@@ -85,6 +85,7 @@ public partial class SceneSwitcher : Node
 	private async Task FadeOutAsync()
 	{
 		if (_fadeRect == null) return;
+		AudioManager.Instance?.PlaySfx(AudioManager.SfxSceneTransition);
 		var tw = CreateTween();
 		tw.TweenProperty(_fadeRect, "modulate:a", 1.0f, FadeSeconds);
 		await ToSignal(tw, Tween.SignalName.Finished);

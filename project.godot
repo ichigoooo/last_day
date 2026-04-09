@@ -35,8 +35,26 @@ MCPGameInspector="*res://addons/godot_mcp/mcp_game_inspector_service.gd"
 [dialogic]
 
 directories/dch_directory={}
-directories/dtl_directory={}
-layout/style_directory={}
+directories/dtl_directory={
+"intro_archive": "res://resources/dialogic/timelines/intro_archive.dtl",
+"intro_boot": "res://resources/dialogic/timelines/intro_boot.dtl",
+"verdict_release": "res://resources/dialogic/timelines/verdict_release.dtl"
+}
+layout/style_directory={
+"": "res://resources/dialogic/styles/redhackathon_mobile_vn.tres",
+"RedHackathon Mobile VN": "res://resources/dialogic/styles/redhackathon_mobile_vn.tres"
+}
+variables={
+"archive": {
+"escape": "",
+"relation": "",
+"work": ""
+},
+"death_cause_text": "",
+"reaper_opening": ""
+}
+layout/default_style="res://resources/dialogic/styles/redhackathon_mobile_vn.tres"
+layout/style_list=PackedStringArray("res://resources/dialogic/styles/redhackathon_mobile_vn.tres")
 
 [display]
 

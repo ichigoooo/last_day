@@ -8,6 +8,7 @@ public partial class TypewriterLabel : Label
 	private Timer _timer;
 	private string _full = "";
 	private int _charIndex;
+	private ulong _lastTypewriterSfxTicks;
 
 	[Signal]
 	public delegate void FinishedEventHandler();
@@ -59,5 +60,18 @@ public partial class TypewriterLabel : Label
 		}
 		_charIndex++;
 		Text = _full.Substring(0, _charIndex);
+		if (_charIndex > 0)
+		{
+			var c = _full[_charIndex - 1];
+			if (!char.IsWhiteSpace(c))
+			{
+				var t = Time.GetTicksMsec();
+				if (t - _lastTypewriterSfxTicks >= 45)
+				{
+					_lastTypewriterSfxTicks = t;
+					AudioManager.Instance?.PlaySfx(AudioManager.SfxTypewriterSoft);
+				}
+			}
+		}
 	}
 }

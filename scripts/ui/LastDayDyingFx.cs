@@ -37,5 +37,6 @@ public partial class LastDayDyingFx : ColorRect
 		_pulse = 1f;
 		if (_mat != null)
 			_mat.SetShaderParameter("death_pulse", _pulse);
+		AudioManager.Instance?.PlaySfx(AudioManager.SfxHeartbeat);
 	}
 }

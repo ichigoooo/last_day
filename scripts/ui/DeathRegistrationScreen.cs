@@ -141,11 +141,16 @@ public partial class DeathRegistrationScreen : Control
 	private async Task ProcessArchiveAsync()
 	{
 		_stage = IntroStage.Processing;
+		// 档案时间线已结束：先断开 signal 并结束 Dialogic，再进入长异步，避免与 SceneSwitcher 切换叠加时重复触发或残留布局节点。
+		DialogicRuntime.DisconnectTimelineEnded(this, Callable.From(OnDialogicTimelineEnded));
+		_timelineActive = false;
+		DialogicRuntime.EndTimeline(this);
+
 		_statusLabel.Text = "缮写档案中…";
 
-		var work = DialogicRuntime.GetString(this, "archive/work").Trim();
-		var relation = DialogicRuntime.GetString(this, "archive/relation").Trim();
-		var escape = DialogicRuntime.GetString(this, "archive/escape").Trim();
+		var work = DialogicRuntime.GetString(this, "archive.work").Trim();
+		var relation = DialogicRuntime.GetString(this, "archive.relation").Trim();
+		var escape = DialogicRuntime.GetString(this, "archive.escape").Trim();
 		var combined = $"{work}\n{relation}\n{escape}";
 		if (CrisisKeywordGuard.ContainsCrisisContent(combined))
 		{

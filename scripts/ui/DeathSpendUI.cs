@@ -55,6 +55,8 @@ public partial class DeathSpendUI : CanvasLayer
 	{
 		if (_result != null) _result.Text = "……";
 		var r = await DeathSpendService.ExecuteAsync(opt);
+		if (r.EffectLine != "余额不足")
+			AudioManager.Instance?.PlaySfx(AudioManager.SfxUiSpend);
 		if (_result != null)
 			_result.Text = $"{r.EffectLine}\n\n{r.Narration}";
 		GameManager.Instance?.Session.ActivityLog.AppendNote("LastDay", $"花钱：{opt.Name}，{r.EffectLine}");

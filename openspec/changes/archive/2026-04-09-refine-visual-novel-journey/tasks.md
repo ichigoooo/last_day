@@ -30,10 +30,10 @@
 
 ## 5. Dialogic 与系统桥接
 
-- [ ] 5.1 规划 Dialogic 变量表、时间线命名和桥接调用边界
+- [x] 5.1 规划 Dialogic 变量表、时间线命名和桥接调用边界
 - [x] 5.2 新增或整理桥接方法，用于读写 `GameSession`、生成死因、讣告、墓志铭与统计报告
 - [x] 5.3 记录序章与终章关键节点到 `SessionActivityLog`，保证总结链路与后续卡片生成可用
-- [ ] 5.4 校验场景切换、Dialogic 时间线结束信号和现有 `SceneSwitcher` 的衔接稳定性
+- [x] 5.4 校验场景切换、Dialogic 时间线结束信号和现有 `SceneSwitcher` 的衔接稳定性
 
 ## 6. 文案与体验验收
 

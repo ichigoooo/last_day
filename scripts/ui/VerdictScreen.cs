@@ -57,6 +57,7 @@ public partial class VerdictScreen : Control
 		DialogicRuntime.SetVariable(this, "reaper_opening", session?.ReaperOpening ?? "");
 		DialogicRuntime.ConnectTimelineEnded(this, Callable.From(OnTimelineEnded));
 		_timelineActive = true;
+		AudioManager.Instance?.PlaySfx(AudioManager.SfxGavel);
 		DialogicRuntime.StartTimeline(this, DialogicRuntime.VerdictReleaseTimeline);
 	}
 
@@ -64,6 +65,7 @@ public partial class VerdictScreen : Control
 	{
 		if (!_timelineActive) return;
 		_timelineActive = false;
+		AudioManager.Instance?.PlaySfx(AudioManager.SfxStamp);
 		if (SceneSwitcher.Instance != null)
 			await SceneSwitcher.Instance.SwitchToAsync(GameManager.Phase.LastDay);
 	}

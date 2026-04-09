@@ -2,6 +2,7 @@ using Godot;
 
 /// <summary>
 /// Dialogic 运行时桥接：负责启动时间线、读写变量和清理布局节点。
+/// 变量路径使用点号嵌套（如 archive.work）；须在项目 Dialogic Variables 中预置默认值。
 /// </summary>
 public static class DialogicRuntime
 {
