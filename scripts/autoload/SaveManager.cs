@@ -37,6 +37,7 @@ public partial class SaveManager : Node
 	{
 		LoadSettingsInternal();
 		MigrateLegacyApiConfig();
+		MigrateMiniMaxToArkIfNeeded();
 		LoadSaveDataInternal();
 	}
 
@@ -70,9 +71,41 @@ public partial class SaveManager : Node
 		[JsonPropertyName("model")] public string Model { get; set; }
 	}
 
+	/// <summary>旧版 MiniMax 配置无法用于火山方舟；一次性迁移为豆包默认并清空 Key，需用户填写 Ark Key。</summary>
+	private void MigrateMiniMaxToArkIfNeeded()
+	{
+		if (!LooksLikeMiniMaxSettings(_settings))
+			return;
+
+		GD.Print("[SaveManager] 检测到 MiniMax 配置，已切换为火山方舟（豆包）默认 Endpoint；API Key 已清空，请填写 Ark 端点密钥。");
+		_settings.BaseUrl = UserSettings.DefaultApiBaseUrl;
+		_settings.Model = UserSettings.DefaultModelId;
+		_settings.ApiKey = "";
+		SaveSettingsInternal();
+	}
+
+	private static bool LooksLikeMiniMaxSettings(UserSettings s)
+	{
+		if (s == null) return false;
+		if (!string.IsNullOrEmpty(s.BaseUrl) &&
+		    s.BaseUrl.Contains("minimaxi", StringComparison.OrdinalIgnoreCase))
+			return true;
+		if (!string.IsNullOrEmpty(s.Model) &&
+		    (s.Model.Contains("MiniMax", StringComparison.OrdinalIgnoreCase) ||
+		     s.Model.Contains("minimax", StringComparison.OrdinalIgnoreCase)))
+			return true;
+		return false;
+	}
+
 	public void LoadSettings()
 	{
 		LoadSettingsInternal();
+	}
+
+	/// <summary>打开设置页时可调用：若本地仍为 MiniMax，切换豆包并清空 Key（幂等）。</summary>
+	public void EnsureMiniMaxMigratedToArk()
+	{
+		MigrateMiniMaxToArkIfNeeded();
 	}
 
 	private void LoadSettingsInternal()

@@ -17,8 +17,8 @@
 【当前电量】
 {{current_battery}}
 
-【本局核心遗愿（宣判阶段确认）】
-{{final_wish}}
+【档案摘要（序章提炼）】
+{{archive_summary}}
 
 【最近叙事摘要】
 {{story_summary}}

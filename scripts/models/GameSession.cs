@@ -22,6 +22,10 @@ public class GameSession
 	[JsonPropertyName("death_cause_text")]
 	public string DeathCauseText { get; set; } = "";
 
+	/// <summary>由序章档案处提炼出的中段叙事锚点。</summary>
+	[JsonPropertyName("archive_summary")]
+	public string ArchiveSummary { get; set; } = "";
+
 	[JsonPropertyName("reaper_annotation")]
 	public string ReaperAnnotation { get; set; } = "";
 

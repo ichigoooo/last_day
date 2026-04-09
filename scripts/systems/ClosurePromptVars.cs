@@ -18,6 +18,7 @@ public static class ClosurePromptVars
 			["work"] = session?.Soul?.WorkText ?? "",
 			["relation"] = session?.Soul?.RelationText ?? "",
 			["escape"] = session?.Soul?.EscapeText ?? "",
+			["archive_summary"] = session?.ArchiveSummary ?? "",
 			["final_wish"] = session?.FinalWish ?? "",
 			["death_cause"] = session?.DeathCauseText ?? "",
 			["session_summary"] = BuildSessionSummaryBrief(session),

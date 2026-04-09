@@ -350,7 +350,7 @@ public static class LastDayDirector
 			["current_time"] = TimeManager.Instance?.GetClockDisplay() ?? "--:--",
 			["current_money"] = MoneySystem.Instance?.Yuan.ToString() ?? "0",
 			["current_battery"] = BatterySystem.Instance?.Percent.ToString("F0") ?? "0",
-			["final_wish"] = session.FinalWish ?? "",
+			["archive_summary"] = session.ArchiveSummary ?? "",
 			["story_summary"] = world.NarrativeSummary ?? "",
 			["player_input"] = playerInput
 		};
@@ -507,7 +507,7 @@ public static class LastDayDirector
 			["current_time"] = TimeManager.Instance?.GetClockDisplay() ?? "--:--",
 			["current_money"] = MoneySystem.Instance?.Yuan.ToString() ?? "0",
 			["current_battery"] = BatterySystem.Instance?.Percent.ToString("F0") ?? "0",
-			["final_wish"] = session.FinalWish ?? "",
+			["archive_summary"] = session.ArchiveSummary ?? "",
 			["story_summary"] = world.NarrativeSummary ?? "",
 			["player_input"] = playerInput,
 			["destination_text"] = intent.DestinationText ?? "",
@@ -561,7 +561,7 @@ public static class LastDayDirector
 		var tmpl = PromptLoader.LoadUser("story_summary");
 		var sumVars = new Dictionary<string, string>
 		{
-			["final_wish"] = session.FinalWish ?? "",
+			["archive_summary"] = session.ArchiveSummary ?? "",
 			["previous_summary"] = world.NarrativeSummary ?? "",
 			["recent_turns"] = string.IsNullOrEmpty(lines) ? "（暂无）" : lines
 		};

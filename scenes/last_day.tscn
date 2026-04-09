@@ -158,6 +158,19 @@ theme_override_font_sizes/font_size = 22
 text = "叙事摘要：（尚未压缩）"
 autowrap_mode = 3
 
+[node name="NarrationScroll" type="ScrollContainer" parent="M/MainColumn" unique_id=842048501]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NarrationLabel" type="RichTextLabel" parent="M/MainColumn/NarrationScroll" unique_id=317755680]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "描述与氛围会出现在这里。读完旁白后可在下方选一项回应，或在最下方输入你想说的话。"
+
 [node name="OptionsColumn" type="VBoxContainer" parent="M/MainColumn" unique_id=1842409085]
 unique_name_in_owner = true
 layout_mode = 2
@@ -187,26 +200,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 autowrap_mode = 3
 
-[node name="OptionCustom" type="Button" parent="M/MainColumn/OptionsColumn" unique_id=1723402432]
+[node name="OptionCustom" type="Label" parent="M/MainColumn" unique_id=1723402432]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.65, 0.78, 1)
+theme_override_font_sizes/font_size = 22
 text = "自定义输入…"
 autowrap_mode = 3
-
-[node name="NarrationScroll" type="ScrollContainer" parent="M/MainColumn" unique_id=842048501]
-custom_minimum_size = Vector2(0, 200)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="NarrationLabel" type="RichTextLabel" parent="M/MainColumn/NarrationScroll" unique_id=317755680]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "描述与氛围会出现在这里。可在上方选一个姿态，或在下面输入你想做的事。"
 
 [node name="InputRow" type="HBoxContainer" parent="M/MainColumn" unique_id=1907960059]
 layout_mode = 2

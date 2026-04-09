@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 /// <summary>入殓登记：三问 → 灵魂标签 → 死因 → 批注（打字机）→ 前往宣判。</summary>
 public partial class DeathRegistrationScreen : Control
 {
+	private enum IntroStage
+	{
+		None,
+		Boot,
+		Archive,
+		Processing
+	}
+
 	private TextEdit _workEdit;
 	private TextEdit _relationEdit;
 	private TextEdit _escapeEdit;
@@ -17,6 +25,9 @@ public partial class DeathRegistrationScreen : Control
 	private Button _continueButton;
 	private Button _skipTypingButton;
 	private Button _backButton;
+	private IntroStage _stage = IntroStage.None;
+	private bool _timelineActive;
+	private ColorRect _dialogicBackdrop;
 
 	public override void _Ready()
 	{
@@ -57,16 +68,63 @@ public partial class DeathRegistrationScreen : Control
 		_backButton.Pressed += OnBackPressed;
 		_typewriter.Finished += OnTypingFinished;
 
-		Callable.From(EnsureApiConfiguredAsync).CallDeferred();
+		PrepareDialogicBackdrop();
+		HideLegacyForm();
+		Callable.From(BeginIntroAsync).CallDeferred();
 	}
 
-	private async void EnsureApiConfiguredAsync()
+	private void PrepareDialogicBackdrop()
 	{
-		if (ApiBridge.Instance != null && ApiBridge.Instance.IsConfigured) return;
-		_statusLabel.Text = "未配置 API Key，无法继续。将前往设置。";
-		_submitButton.Disabled = true;
-		if (SceneSwitcher.Instance != null)
-			await SceneSwitcher.Instance.SwitchToAsync(GameManager.Phase.Settings);
+		_dialogicBackdrop = new ColorRect
+		{
+			Color = new Color(0.03f, 0.03f, 0.04f, 1f),
+			MouseFilter = MouseFilterEnum.Ignore
+		};
+		_dialogicBackdrop.SetAnchorsPreset(LayoutPreset.FullRect);
+		AddChild(_dialogicBackdrop);
+		MoveChild(_dialogicBackdrop, 0);
+	}
+
+	private void HideLegacyForm()
+	{
+		var title = GetNodeOrNull<Control>("%TitleLabel");
+		if (title != null) title.Visible = false;
+		_formBlock.Visible = false;
+		_annotationBlock.Visible = false;
+		_backButton.Visible = false;
+		_statusLabel.Text = "";
+		_statusLabel.Visible = true;
+	}
+
+	private async void BeginIntroAsync()
+	{
+		GameManager.Instance?.ResetSession();
+		StartDialogic(DialogicRuntime.IntroBootTimeline, IntroStage.Boot);
+		await Task.CompletedTask;
+	}
+
+	private void StartDialogic(string timelinePath, IntroStage stage)
+	{
+		_stage = stage;
+		_timelineActive = true;
+		DialogicRuntime.ConnectTimelineEnded(this, Callable.From(OnDialogicTimelineEnded));
+		DialogicRuntime.StartTimeline(this, timelinePath);
+	}
+
+	private async void OnDialogicTimelineEnded()
+	{
+		if (!_timelineActive) return;
+		_timelineActive = false;
+
+		switch (_stage)
+		{
+			case IntroStage.Boot:
+				StartDialogic(DialogicRuntime.IntroArchiveTimeline, IntroStage.Archive);
+				break;
+			case IntroStage.Archive:
+				await ProcessArchiveAsync();
+				break;
+		}
 	}
 
 	private void OnTypingFinished()
@@ -78,6 +136,77 @@ public partial class DeathRegistrationScreen : Control
 	private void OnSkipTyping()
 	{
 		_typewriter?.SkipToEnd();
+	}
+
+	private async Task ProcessArchiveAsync()
+	{
+		_stage = IntroStage.Processing;
+		_statusLabel.Text = "缮写档案中…";
+
+		var work = DialogicRuntime.GetString(this, "archive/work").Trim();
+		var relation = DialogicRuntime.GetString(this, "archive/relation").Trim();
+		var escape = DialogicRuntime.GetString(this, "archive/escape").Trim();
+		var combined = $"{work}\n{relation}\n{escape}";
+		if (CrisisKeywordGuard.ContainsCrisisContent(combined))
+		{
+			await CrisisHelpOverlay.ShowBlockingAsync(GetTree());
+			return;
+		}
+
+		try
+		{
+			var profile = new SoulProfile
+			{
+				WorkText = work,
+				RelationText = relation,
+				EscapeText = escape
+			};
+
+			SoulTagExtractor.ApplyKeywordTags(profile);
+			await SoulTagExtractor.TryRefineWithLlmAsync(profile);
+			GameManager.Instance?.ApplySoulProfile(profile);
+
+			var cause = await DeathCauseGenerator.GenerateAsync(profile);
+			var ann = await FetchAnnotationAsync(profile);
+			var open = await FetchOpeningAsync(profile, cause);
+
+			var session = GameManager.Instance?.Session;
+			if (session != null)
+			{
+				session.DeathCauseId = cause.Id;
+				session.DeathCauseText = cause.Text;
+				session.ReaperAnnotation = ann;
+				session.ReaperOpening = open;
+				session.ArchiveSummary = BuildArchiveSummary(profile, ann);
+			}
+
+			var phase = GameManager.Phase.DeathRegistration.ToString();
+			var log = GameManager.Instance?.ActivityLog;
+			if (log != null)
+			{
+				log.AppendReaperDialogue(phase, "user",
+					$"【档案处】自述：{profile.WorkText}\n想到的人：{profile.RelationText}\n一直在躲：{profile.EscapeText}");
+				log.AppendReaperDialogue(phase, "reaper", ann);
+				log.AppendReaperDialogue(phase, "reaper", $"【死因待裁定】{cause.Text}");
+			}
+
+			_statusLabel.Text = "";
+			if (SceneSwitcher.Instance != null)
+				await SceneSwitcher.Instance.SwitchToAsync(GameManager.Phase.Verdict);
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr(e.ToString());
+			_statusLabel.Text = "归档失败，请返回重试。";
+			_backButton.Visible = true;
+		}
+	}
+
+	private static string BuildArchiveSummary(SoulProfile profile, string annotation)
+	{
+		var tags = profile?.Tags == null || profile.Tags.Length == 0 ? "" : $"标签：{string.Join("、", profile.Tags)}。";
+		var ann = string.IsNullOrWhiteSpace(annotation) ? "" : $"批注：{annotation.Trim()}";
+		return $"{tags}{ann}".Trim();
 	}
 
 	private async void OnSubmitPressed()
@@ -211,5 +340,11 @@ public partial class DeathRegistrationScreen : Control
 	{
 		if (SceneSwitcher.Instance != null)
 			await SceneSwitcher.Instance.SwitchToAsync(GameManager.Phase.MainMenu);
+	}
+
+	public override void _ExitTree()
+	{
+		DialogicRuntime.DisconnectTimelineEnded(this, Callable.From(OnDialogicTimelineEnded));
+		DialogicRuntime.EndTimeline(this);
 	}
 }

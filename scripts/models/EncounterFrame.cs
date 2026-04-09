@@ -306,6 +306,7 @@ public sealed class EncounterFrame
 		f.CustomHint = ContentSafetyFilter.ClampLastDayCustomHint(ContentSafetyFilter.SanitizeDisplay(f.CustomHint ?? ""));
 		foreach (var o in f.Options)
 			o.Label = ContentSafetyFilter.SanitizeDisplay(o.Label ?? "");
+		ContentSafetyFilter.NormalizeLastDayEncounterFamilyAppellations(f);
 	}
 
 	public NarrativeTurn ToLegacyNarrativeTurn()

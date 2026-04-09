@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -6,12 +7,47 @@ using System.Text.RegularExpressions;
 /// </summary>
 public static class ContentSafetyFilter
 {
+	/// <summary>单字 +「阿姨」多为模型臆造姓氏称呼；双字前缀易误伤「隔壁阿姨」等，故仅收单字。</summary>
+	private static readonly Regex MotherSingleSurnameAuntPattern = new(@"([\u4e00-\u9fff])阿姨",
+		RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+	private static readonly Regex FatherSingleSurnameUnclePattern = new(@"([\u4e00-\u9fff])(叔叔|伯伯|大叔)",
+		RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+	private static readonly Regex FatherSingleSurnameShuPattern = new(@"([\u4e00-\u9fff])叔",
+		RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+	private static readonly HashSet<string> AuntUnclePrefixExclude =
+	[
+		"好", "老", "小", "那", "这", "某", "每", "各", "多", "大", "二", "三", "四", "五", "六", "七", "八", "九", "十",
+		"阿", "隔", "邻", "对", "神", "堂", "表", "姑", "舅", "叔"
+	];
+
+	private static readonly Regex InventedAuntCallerName = new(@"^[\u4e00-\u9fff]{1,2}阿姨$",
+		RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+	private static readonly Regex InventedUncleCallerName = new(@"^[\u4e00-\u9fff]{1,2}(叔叔|伯伯|大叔)$",
+		RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+	private static readonly Regex InventedShuCallerName = new(@"^[\u4e00-\u9fff]{1,2}叔$",
+		RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+	private static readonly string[] MotherFigureRoleMarkers =
+	[
+		"母亲", "妈妈", "妈咪", "阿妈", "咱妈", "你妈", "岳母", "丈母娘", "婆婆", "继母"
+	];
+
+	private static readonly string[] FatherFigureRoleMarkers =
+	[
+		"父亲", "爸爸", "你爸", "咱爸", "爹", "岳父", "公公", "你的父亲"
+	];
+
 	private static readonly string[] SoftReplace =
 	[
 		"血腥", "暴力", "自残", "自杀", "色情", "淫秽"
 	];
 
-	/// <summary>第四颗「自定义」按钮文案：模型常误把旁白塞进 custom_hint，此处限制为短标签。</summary>
+	/// <summary>输入区上方自定义说明标签文案：模型常误把旁白塞进 custom_hint，此处限制为短标签。</summary>
 	public static string ClampLastDayCustomHint(string text, int maxLen = 16)
 	{
 		if (string.IsNullOrWhiteSpace(text)) return text ?? "";
@@ -30,6 +66,112 @@ public static class ContentSafetyFilter
 				s = s.Replace(w, "……", StringComparison.Ordinal);
 		}
 		return s;
+	}
+
+	/// <summary>
+	/// 「最后一天」遭遇帧：将模型臆造的「某姓+阿姨/叔叔」等从核心家人称谓中剥离，旁白与标题改用「她/他」或仅保留关系（如你的母亲）。
+	/// </summary>
+	public static void NormalizeLastDayEncounterFamilyAppellations(EncounterFrame f)
+	{
+		if (f == null) return;
+		var role = f.CharacterRole ?? "";
+		var motherFig = LooksLikeMotherFigureRole(role);
+		var fatherFig = !motherFig && LooksLikeFatherFigureRole(role);
+		var name = (f.CharacterName ?? "").Trim();
+
+		if (motherFig && InventedAuntCallerName.IsMatch(name))
+		{
+			ReplaceTokenInFrameTexts(f, name, "她");
+			f.CharacterName = "";
+		}
+		else if (fatherFig && (InventedUncleCallerName.IsMatch(name) || InventedShuCallerName.IsMatch(name)))
+		{
+			ReplaceTokenInFrameTexts(f, name, "他");
+			f.CharacterName = "";
+		}
+
+		if (motherFig)
+		{
+			f.Narration = ReplaceMotherAuntRefs(f.Narration);
+			f.DialogueStageNote = ReplaceMotherAuntRefs(f.DialogueStageNote);
+			f.EncounterSummary = ReplaceMotherAuntRefs(f.EncounterSummary);
+			if (f.Options != null)
+				foreach (var o in f.Options)
+					o.Label = ReplaceMotherAuntRefs(o.Label);
+		}
+		else if (fatherFig)
+		{
+			f.Narration = ReplaceFatherUncleRefs(f.Narration);
+			f.DialogueStageNote = ReplaceFatherUncleRefs(f.DialogueStageNote);
+			f.EncounterSummary = ReplaceFatherUncleRefs(f.EncounterSummary);
+			if (f.Options != null)
+				foreach (var o in f.Options)
+					o.Label = ReplaceFatherUncleRefs(o.Label);
+		}
+	}
+
+	private static string ReplaceMotherAuntRefs(string s)
+	{
+		if (string.IsNullOrEmpty(s)) return s;
+		return MotherSingleSurnameAuntPattern.Replace(s, m =>
+		{
+			var prefix = m.Groups[1].Value;
+			if (AuntUnclePrefixExclude.Contains(prefix)) return m.Value;
+			return "她";
+		});
+	}
+
+	private static string ReplaceFatherUncleRefs(string s)
+	{
+		if (string.IsNullOrEmpty(s)) return s;
+		s = FatherSingleSurnameUnclePattern.Replace(s, m =>
+		{
+			var prefix = m.Groups[1].Value;
+			if (AuntUnclePrefixExclude.Contains(prefix)) return m.Value;
+			return "他";
+		});
+		s = FatherSingleSurnameShuPattern.Replace(s, m =>
+		{
+			var prefix = m.Groups[1].Value;
+			if (AuntUnclePrefixExclude.Contains(prefix)) return m.Value;
+			return "他";
+		});
+		return s;
+	}
+
+	private static bool LooksLikeMotherFigureRole(string r)
+	{
+		if (string.IsNullOrEmpty(r)) return false;
+		foreach (var m in MotherFigureRoleMarkers)
+			if (r.Contains(m, StringComparison.Ordinal))
+				return true;
+		return false;
+	}
+
+	private static bool LooksLikeFatherFigureRole(string r)
+	{
+		if (string.IsNullOrEmpty(r)) return false;
+		foreach (var m in FatherFigureRoleMarkers)
+			if (r.Contains(m, StringComparison.Ordinal))
+				return true;
+		return false;
+	}
+
+	private static void ReplaceTokenInFrameTexts(EncounterFrame f, string token, string pronoun)
+	{
+		if (string.IsNullOrEmpty(token)) return;
+		f.Narration = ReplaceWholePhrase(f.Narration ?? "", token, pronoun);
+		f.DialogueStageNote = ReplaceWholePhrase(f.DialogueStageNote ?? "", token, pronoun);
+		f.EncounterSummary = ReplaceWholePhrase(f.EncounterSummary ?? "", token, pronoun);
+		if (f.Options == null) return;
+		foreach (var o in f.Options)
+			o.Label = ReplaceWholePhrase(o.Label ?? "", token, pronoun);
+	}
+
+	private static string ReplaceWholePhrase(string s, string token, string pronoun)
+	{
+		if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(token)) return s;
+		return s.Replace(token, pronoun, StringComparison.Ordinal);
 	}
 
 	/// <summary>

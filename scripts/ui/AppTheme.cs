@@ -15,19 +15,19 @@ public static class AppTheme
 	public static readonly Color AccentMutedRed = new(0.55f, 0.32f, 0.34f);
 
 	/// <summary>主菜单/章节大标题。</summary>
-	public const int FontSizeDisplay = 44;
+	public const int FontSizeDisplay = 66;
 	/// <summary>页面标题（登记、宣判等）。</summary>
-	public const int FontSizeTitle = 36;
+	public const int FontSizeTitle = 54;
 	/// <summary>次级标题、状态栏主数字。</summary>
-	public const int FontSizeSection = 30;
+	public const int FontSizeSection = 45;
 	/// <summary>正文默认：场景内多数说明、叙事、表单标签。</summary>
-	public const int FontSizeBody = 28;
+	public const int FontSizeBody = 42;
 	/// <summary>按钮、选项、长文本辅助。</summary>
-	public const int FontSizeBodySmall = 26;
+	public const int FontSizeBodySmall = 39;
 	/// <summary>次要说明、副标题、状态栏相位。</summary>
-	public const int FontSizeCaption = 22;
+	public const int FontSizeCaption = 33;
 	/// <summary>极次要脚注（尽量少用）。</summary>
-	public const int FontSizeMicro = 20;
+	public const int FontSizeMicro = 30;
 
 	/// <summary>主要按钮最小高度（约 48dp+，适配手指）。</summary>
 	public const int MinButtonHeight = 54;

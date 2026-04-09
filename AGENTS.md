@@ -1,7 +1,9 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-这是一个 Godot 4.6 + C# 的移动向项目，入口配置在 `project.godot`，主场景为 `res://scenes/main.tscn`。核心代码放在 `scripts/`：`autoload/` 为全局单例，`ui/` 为界面脚本，`systems/` 为玩法系统，`models/` 为数据模型。场景文件在 `scenes/`，手动测试场景在 `scenes/tests/`。运行时资源在 `resources/`，其中 `prompts/` 存 LLM 模板，`locations/` 存 JSON 数据；美术与音频素材在 `assets/`。`addons/` 为第三方或编辑器插件，非必要不要随意修改。
+这是一个 Godot 4.6 + C# 的移动向项目，竖屏 1080×1920，入口配置在 `project.godot`，主场景为 `res://scenes/main.tscn`。核心代码放在 `scripts/`：`autoload/` 为全局单例，`ui/` 为界面脚本，`systems/` 为玩法系统，`models/` 为数据模型，`Common/` 为共享工具。场景文件在 `scenes/`，手动测试场景在 `scenes/tests/`。运行时资源在 `resources/`，其中 `prompts/` 存 LLM 模板，`locations/` 存 JSON 数据；美术与音频素材在 `assets/`。`addons/` 为第三方或编辑器插件，非必要不要随意修改。
+
+UI 字号集中定义在 `scripts/ui/AppTheme.cs`（`FontSizeDisplay` / `FontSizeTitle` / `FontSizeBody` 等），修改此处可全局调整字体大小。
 
 ## Build, Test, and Development Commands
 使用 Godot 编辑器开发时，运行 `godot --editor --path .` 打开项目。命令行启动主流程可用 `godot --path .`。C# 编译检查使用 `dotnet build RedHackathon.sln`；提交前至少跑一次，确保 `.csproj` 与场景绑定没有断裂。SVG 插件回归测试目前为手动方式：在编辑器中打开 `scenes/tests/svg_plugin_test.tscn` 后按 `F6`。

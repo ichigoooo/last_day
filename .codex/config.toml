@@ -1,0 +1,8 @@
+# Codex MCP：Godot MCP Pro（与 `.cursor/mcp.json` 同源服务端）
+# 使用前：用 Godot 打开本仓库、启用插件；6505 仅单实例占用（多终端/多 Agent 会冲突）
+[mcp_servers.godot-mcp-pro]
+command = "node"
+args = ["/Users/wuyuheng/Documents/Projects/RedHackathon/red-hackathon/godot-mcp-pro-v1.10.1/server/build/index.js"]
+
+[mcp_servers.godot-mcp-pro.env]
+GODOT_MCP_PORT = "6505"

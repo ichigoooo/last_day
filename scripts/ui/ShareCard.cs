@@ -70,6 +70,9 @@ public partial class ShareCard : PanelContainer
 		sb.AppendLine();
 		sb.AppendLine("墓志铭");
 		sb.AppendLine(session?.Epitaph ?? "——");
+		sb.AppendLine();
+		sb.AppendLine("遗愿登记");
+		sb.AppendLine(string.IsNullOrWhiteSpace(session?.FinalWish) ? "——" : session.FinalWish.Trim());
 		return sb.ToString().Trim();
 	}
 

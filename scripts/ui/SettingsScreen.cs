@@ -21,10 +21,12 @@ public partial class SettingsScreen : Control
 		_statusLabel = GetNode<Label>("%StatusLabel");
 		_saveButton = GetNode<Button>("%SaveButton");
 
+		SaveManager.Instance?.EnsureMiniMaxMigratedToArk();
 		var s = SaveManager.Instance?.Settings ?? new UserSettings();
 		_keyEdit.Text = s.ApiKey;
 		_urlEdit.Text = s.BaseUrl;
 		_modelEdit.Text = s.Model;
+		ApiBridge.Instance?.Configure(s.ApiKey, s.Model, s.BaseUrl);
 
 		_saveButton.Pressed += OnSavePressed;
 	}
@@ -43,8 +45,10 @@ public partial class SettingsScreen : Control
 
 		var u = sm.Settings;
 		u.ApiKey = key;
-		u.BaseUrl = string.IsNullOrWhiteSpace(_urlEdit.Text) ? "https://api.deepseek.com" : _urlEdit.Text.Trim().TrimEnd('/');
-		u.Model = string.IsNullOrWhiteSpace(_modelEdit.Text) ? "deepseek-chat" : _modelEdit.Text.Trim();
+		u.BaseUrl = string.IsNullOrWhiteSpace(_urlEdit.Text)
+			? UserSettings.DefaultApiBaseUrl
+			: _urlEdit.Text.Trim().TrimEnd('/');
+		u.Model = string.IsNullOrWhiteSpace(_modelEdit.Text) ? UserSettings.DefaultModelId : _modelEdit.Text.Trim();
 		u.FirstSetupCompleted = true;
 		sm.UpdateSettings(u);
 

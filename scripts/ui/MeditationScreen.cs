@@ -3,7 +3,7 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-/// <summary>冥想引导：结构化四段 JSON，可跳过进入终局。</summary>
+/// <summary>真相揭示：将模拟死亡的体验返还给现实。</summary>
 public partial class MeditationScreen : Control
 {
 	public override void _Ready()
@@ -11,6 +11,15 @@ public partial class MeditationScreen : Control
 		AppTheme.ApplyTo(this);
 		MouseFilter = MouseFilterEnum.Stop;
 		SetAnchorsPreset(LayoutPreset.FullRect);
+
+		var bg = new ColorRect
+		{
+			Color = new Color(0.12f, 0.11f, 0.1f, 1f),
+			MouseFilter = MouseFilterEnum.Ignore
+		};
+		bg.SetAnchorsPreset(LayoutPreset.FullRect);
+		AddChild(bg);
+		MoveChild(bg, 0);
 
 		var margin = new MarginContainer();
 		margin.SetAnchorsPreset(LayoutPreset.FullRect);
@@ -26,7 +35,7 @@ public partial class MeditationScreen : Control
 
 		var title = new Label
 		{
-			Text = "死亡冥想",
+			Text = "回执",
 			HorizontalAlignment = HorizontalAlignment.Center
 		};
 		title.AddThemeFontSizeOverride("font_size", AppTheme.FontSizeTitle);
@@ -36,7 +45,7 @@ public partial class MeditationScreen : Control
 		{
 			SizeFlagsVertical = SizeFlags.ExpandFill,
 			SizeFlagsHorizontal = SizeFlags.ExpandFill,
-			CustomMinimumSize = new Vector2(0, 520)
+			CustomMinimumSize = new Vector2(0, 420)
 		};
 		v.AddChild(scroll);
 
@@ -48,42 +57,65 @@ public partial class MeditationScreen : Control
 		body.AddThemeFontSizeOverride("font_size", AppTheme.FontSizeBody);
 		scroll.AddChild(body);
 
+		var q = new Label
+		{
+			Text = "既然没有死，明天醒来之后，你第一件想做得不一样的事是什么？",
+			AutowrapMode = TextServer.AutowrapMode.WordSmart
+		};
+		q.AddThemeFontSizeOverride("font_size", AppTheme.FontSizeBody);
+		v.AddChild(q);
+
+		var edit = new LineEdit
+		{
+			PlaceholderText = "写一句，或留白让它在心里发生。",
+			SizeFlagsHorizontal = SizeFlags.ExpandFill,
+			CustomMinimumSize = new Vector2(0, AppTheme.MinButtonHeight)
+		};
+		v.AddChild(edit);
+
 		var row = new HBoxContainer { Alignment = BoxContainer.AlignmentMode.Center };
 		row.AddThemeConstantOverride("separation", 20);
-		var skip = new Button { Text = "跳过" };
+		var skip = new Button { Text = "留白" };
 		skip.CustomMinimumSize = new Vector2(0, AppTheme.MinButtonHeight);
-		var next = new Button { Text = "进入终局" };
+		var next = new Button { Text = "回到现实" };
 		next.CustomMinimumSize = new Vector2(0, AppTheme.MinButtonHeight);
 		row.AddChild(skip);
 		row.AddChild(next);
 		v.AddChild(row);
 
-		Callable.From(() => RunAsync(body, skip, next)).CallDeferred();
+		Callable.From(() => RunAsync(body, edit, skip, next)).CallDeferred();
 	}
 
-	private async void RunAsync(Label body, Button skip, Button next)
+	private async void RunAsync(Label body, LineEdit edit, Button skip, Button next)
 	{
-		body.Text = await FetchMeditationPlainAsync();
+		body.Text = await FetchRealityReflectionAsync();
 
 		var tcs = new TaskCompletionSource<bool>();
-		void Done()
+		skip.Pressed += () =>
 		{
-			if (tcs.Task.IsCompleted) return;
-			tcs.TrySetResult(true);
-		}
-		skip.Pressed += Done;
-		next.Pressed += Done;
+			edit.Text = "";
+			if (!tcs.Task.IsCompleted) tcs.TrySetResult(true);
+		};
+		next.Pressed += () =>
+		{
+			if (!tcs.Task.IsCompleted) tcs.TrySetResult(true);
+		};
 		await tcs.Task;
-		skip.Pressed -= Done;
-		next.Pressed -= Done;
-		skip.Disabled = true;
-		next.Disabled = true;
+
+		var line = edit.Text?.Trim() ?? "";
+		var session = GameManager.Instance?.Session;
+		if (session != null)
+			session.EndingPledge = line;
+		if (!string.IsNullOrWhiteSpace(line))
+			GameManager.Instance?.ActivityLog?.AppendChoice(GameManager.Phase.Meditation.ToString(), "回到现实的一句", "return_line", line);
+		else
+			GameManager.Instance?.ActivityLog?.AppendNote(GameManager.Phase.Meditation.ToString(), "【回到现实的一句】（留白）");
 
 		if (SceneSwitcher.Instance != null)
 			await SceneSwitcher.Instance.SwitchToAsync(GameManager.Phase.Ending);
 	}
 
-	private static async Task<string> FetchMeditationPlainAsync()
+	private static async Task<string> FetchRealityReflectionAsync()
 	{
 		var session = GameManager.Instance?.Session;
 		if (session == null) return FormatPlainFallback();
@@ -127,12 +159,11 @@ public partial class MeditationScreen : Control
 
 	private static string FormatPlain(string o, string br, string ec, string cl)
 	{
-		return $"【进入】\n{o}\n\n【放慢】\n{br}\n\n【回声】\n{ec}\n\n【收束】\n{cl}";
+		return $"{o}\n\n{br}\n\n{ec}\n\n{cl}";
 	}
 
 	private static string FormatPlainFallback()
 	{
-		var q = Phase1Copy.FallbackMeditationQuarters();
-		return FormatPlain(q.Opening, q.Breath, q.Echo, q.Closing);
+		return "档案归好了。\n\n还有一件不属于手续的事。\n\n你没有死。你只是被迫提前看了一眼，失去之后，什么会真的留下来。\n\n你的时间没有被宣判。它只是刚刚重新回到你手里。";
 	}
 }

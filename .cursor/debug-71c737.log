@@ -1,0 +1,5 @@
+{"sessionId":"71c737","hypothesisId":"H2","location":"LastDayScreen._Ready:before_hydrate","message":"scene_ready_state","data":{"frameNull":true,"actionTurnCount":0,"opt1Null":false,"narrationLen":40},"timestamp":1775738121443,"runId":"verify"}
+{"sessionId":"71c737","hypothesisId":"H3","location":"LastDayScreen.ApplyNarrativeOnly","message":"narrative_applied","data":{"narrLen":66,"optCount":3,"hintLen":14},"timestamp":1775738121452,"runId":"verify"}
+{"sessionId":"71c737","hypothesisId":"H1","location":"LastDayScreen.TryHydrateOpeningEncounterUi","message":"opening_ui_hydrated","data":{"optCount":3,"narrLen":66},"timestamp":1775738121452,"runId":"verify"}
+{"sessionId":"71c737","hypothesisId":"H1","location":"LastDayScreen.RunPlayerTurnAsync:success","message":"turn_applied","data":{"encounterNull":false,"narrLen":217,"optCount":3},"timestamp":1775738164982,"runId":"verify"}
+{"sessionId":"71c737","hypothesisId":"H3","location":"LastDayScreen.ApplyNarrativeOnly","message":"narrative_applied","data":{"narrLen":217,"optCount":3,"hintLen":8},"timestamp":1775738164983,"runId":"verify"}

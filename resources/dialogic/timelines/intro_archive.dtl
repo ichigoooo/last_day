@@ -1,0 +1,11 @@
+reaper: 档案第一页总得写点体面的东西。你平时怎么向别人介绍自己？
+[text_input text="档案处会照录这句原话。" var="archive/work" placeholder="写一句你平时会对别人说的话" allow_empty="false"]
+reaper: 好，先这么记。忙和活着，很多时候写在同一栏。
+
+reaper: 联系人那一栏，我只抄第一个浮上来的名字。你想到谁了？
+[text_input text="只写你第一个想到的人，或你和他的关系。" var="archive/relation" placeholder="比如：我妈 / 前任 / 那个一直没回的人" allow_empty="false"]
+reaper: 这个名字你说得够快。通常不是好事。
+
+reaper: 最后一栏叫未处理事项。很多人会写假话。你一直在躲什么？
+[text_input text="不用写漂亮。写真的。" var="archive/escape" placeholder="写那件你总往后拖的事" allow_empty="false"]
+reaper: 好。剩下的我替你誊进档案。

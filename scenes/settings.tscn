@@ -52,7 +52,7 @@ text = "Base URL"
 [node name="BaseUrlEdit" type="LineEdit" parent="Panel/VBox" unique_id=1913786718]
 unique_name_in_owner = true
 layout_mode = 2
-text = "https://api.deepseek.com"
+text = "https://ark.cn-beijing.volces.com"
 
 [node name="L3" type="Label" parent="Panel/VBox" unique_id=1567605246]
 layout_mode = 2
@@ -61,7 +61,7 @@ text = "模型名"
 [node name="ModelEdit" type="LineEdit" parent="Panel/VBox" unique_id=666618809]
 unique_name_in_owner = true
 layout_mode = 2
-text = "deepseek-chat"
+text = "doubao-seed-2-0-mini-260215"
 
 [node name="StatusLabel" type="Label" parent="Panel/VBox" unique_id=392402193]
 unique_name_in_owner = true

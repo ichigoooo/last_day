@@ -30,8 +30,8 @@
 【当前电量】
 {{current_battery}}
 
-【本局核心遗愿】
-{{final_wish}}
+【档案摘要】
+{{archive_summary}}
 
 【最近叙事摘要】
 {{story_summary}}

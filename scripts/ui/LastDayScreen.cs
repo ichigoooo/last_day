@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 /// <summary>最后一天：布局、遭遇帧主视觉、手机与花钱叠层、日终进死亡。</summary>
 public partial class LastDayScreen : Control
 {
+	private const int LockdownMinute = 23 * 60 + 50;
+
 	private StatusBar _statusBar;
 	private TextureRect _sceneCard;
 	private TextureRect _portraitCard;
@@ -16,7 +18,7 @@ public partial class LastDayScreen : Control
 	private Button _opt1;
 	private Button _opt2;
 	private Button _opt3;
-	private Button _optCustom;
+	private Label _customHintLabel;
 	private Label _phoneToast;
 	private Button _btnMap;
 	private Button _btnEndDialogue;
@@ -40,6 +42,8 @@ public partial class LastDayScreen : Control
 	private int _loadDepth;
 	private string _loadMessage = "";
 	private double _loadDotPhase;
+	private bool _lockdownTriggered;
+	private bool _lockdownTimeFrozen;
 
 	public override void _Ready()
 	{
@@ -63,7 +67,7 @@ public partial class LastDayScreen : Control
 		_opt1 = GetNodeOrNull<Button>("%OptionButton1");
 		_opt2 = GetNodeOrNull<Button>("%OptionButton2");
 		_opt3 = GetNodeOrNull<Button>("%OptionButton3");
-		_optCustom = GetNodeOrNull<Button>("%OptionCustom");
+		_customHintLabel = GetNodeOrNull<Label>("%OptionCustom");
 		_phoneToast = GetNodeOrNull<Label>("%PhoneToast");
 		_btnMap = GetNodeOrNull<Button>("%BtnOpenMap");
 		_btnEndDialogue = GetNodeOrNull<Button>("%BtnEndDialogue");
@@ -87,7 +91,6 @@ public partial class LastDayScreen : Control
 		if (_opt1 != null) _opt1.Pressed += () => OnOption(_opt1);
 		if (_opt2 != null) _opt2.Pressed += () => OnOption(_opt2);
 		if (_opt3 != null) _opt3.Pressed += () => OnOption(_opt3);
-		if (_optCustom != null) _optCustom.Pressed += OnCustomOption;
 
 		if (_btnMap != null) _btnMap.Pressed += () => _map?.Open();
 		if (_btnEndDialogue != null) _btnEndDialogue.Pressed += OnEndDialoguePressed;
@@ -111,6 +114,25 @@ public partial class LastDayScreen : Control
 		_ = RefreshAmbientVisualsAsync();
 		ApplyPresentationModeUi();
 		SetProcess(true);
+
+		TryHydrateOpeningEncounterUi();
+	}
+
+	/// <summary>
+	/// 首局进入场景时尚未跑过 <see cref="LastDayDirector.RunTurnAsync"/>，<c>ApplyNarrativeOnly</c> 不会被调用；
+	/// 用与 API 失败时一致的 fallback 遭遇帧填充旁白与三选项，避免界面只剩占位说明。
+	/// </summary>
+	private void TryHydrateOpeningEncounterUi()
+	{
+		var world = GameManager.Instance?.Session.World;
+		if (world == null) return;
+		if (world.ActionTurnCount > 0) return;
+		if (world.CurrentEncounterFrame != null) return;
+
+		var json = EncounterFrame.BuildFallbackJson();
+		var frame = EncounterFrame.Parse(json, "");
+		EncounterFrame.SanitizeForDisplay(frame);
+		ApplyNarrativeOnly(frame.ToLegacyNarrativeTurn());
 	}
 
 	public override void _Process(double delta)
@@ -119,6 +141,12 @@ public partial class LastDayScreen : Control
 		UpdateAmbient();
 		UpdateLoadingDots(delta);
 		if (_ending) return;
+		if (!_lockdownTriggered && TimeManager.Instance != null &&
+		    TimeManager.Instance.GameMinuteFromMidnight >= LockdownMinute)
+		{
+			_ = BeginLockdownAsync();
+			return;
+		}
 		if (BatterySystem.Instance != null && BatterySystem.Instance.Percent <= 0.05f)
 			_ = ForceEndAsync("电量耗尽。屏幕暗下去之前，你仍听得见自己的呼吸。");
 	}
@@ -133,6 +161,7 @@ public partial class LastDayScreen : Control
 
 	public override void _ExitTree()
 	{
+		ReleaseLockdownFreeze();
 		var msg = MessageSystem.Instance;
 		if (msg != null)
 			msg.ReplyReceived -= OnPhoneReply;
@@ -145,6 +174,7 @@ public partial class LastDayScreen : Control
 
 	private void OnDaytimeDepleted()
 	{
+		if (_lockdownTriggered) return;
 		_ = ForceEndAsync("时间到了。今天不会再给你多一分钟。");
 	}
 
@@ -152,12 +182,58 @@ public partial class LastDayScreen : Control
 	{
 		if (_ending) return;
 		_ending = true;
+		ReleaseLockdownFreeze();
 		_dyingFx?.TriggerDeathPulse();
 		if (_narration != null)
 			_narration.Text = line;
 		await ToSignal(GetTree().CreateTimer(2.2), SceneTreeTimer.SignalName.Timeout);
 		if (SceneSwitcher.Instance != null)
 			await SceneSwitcher.Instance.SwitchToAsync(GameManager.Phase.Death);
+	}
+
+	private async Task BeginLockdownAsync()
+	{
+		if (_lockdownTriggered || _ending) return;
+		_lockdownTriggered = true;
+		FreezeForLockdown();
+		SetLastDayInteractionLocked(true);
+		_btnEndDialogue?.Hide();
+		_phone?.Hide();
+		_spend?.Hide();
+		_map?.Hide();
+		_dyingFx?.TriggerDeathPulse();
+
+		if (_narration != null)
+			_narration.Text = "系统正在收回交互权限。";
+		await ToSignal(GetTree().CreateTimer(1.4), SceneTreeTimer.SignalName.Timeout);
+
+		if (_narration != null)
+			_narration.Text = "你发现了一件残酷的事。最后一天并不会因为它是最后一天，就忽然变得更会说话。";
+		await ToSignal(GetTree().CreateTimer(2.8), SceneTreeTimer.SignalName.Timeout);
+
+		if (_narration != null)
+			_narration.Text = "该删掉的字还是删掉了。该没发出去的话，还是停在发送前一秒。";
+		await ToSignal(GetTree().CreateTimer(2.4), SceneTreeTimer.SignalName.Timeout);
+
+		if (_narration != null)
+			_narration.Text = "时间不等你了。";
+		await ToSignal(GetTree().CreateTimer(1.6), SceneTreeTimer.SignalName.Timeout);
+
+		await ForceEndAsync("23:59。你低头看了一眼状态栏。这个数字，比任何隐喻都准确。");
+	}
+
+	private void FreezeForLockdown()
+	{
+		if (_lockdownTimeFrozen) return;
+		TimeManager.Instance?.PushGameTimeFreeze();
+		_lockdownTimeFrozen = true;
+	}
+
+	private void ReleaseLockdownFreeze()
+	{
+		if (!_lockdownTimeFrozen) return;
+		TimeManager.Instance?.PopGameTimeFreeze();
+		_lockdownTimeFrozen = false;
 	}
 
 	private void OnPhoneReply(string reply, string _tone)
@@ -189,7 +265,7 @@ public partial class LastDayScreen : Control
 		var label = loc.GetDisplayName(locationId);
 		var text = $"前往{label}";
 		if (_input != null) _input.Text = text;
-		await SubmitLastDayTurnAsync(text, clearInputAfter: false);
+		await SubmitLastDayTurnAsync(text);
 	}
 
 	private async Task RefreshAmbientVisualsAsync()
@@ -238,11 +314,11 @@ public partial class LastDayScreen : Control
 	private async void OnSubmit()
 	{
 		if (_busy || _ending || _input == null || IsLoadBlocking()) return;
-		await SubmitLastDayTurnAsync(_input.Text?.Trim() ?? "", clearInputAfter: true);
+		await SubmitLastDayTurnAsync(_input.Text?.Trim() ?? "");
 	}
 
 	/// <summary>统一入口：选项、输入框、地图共用；选项路径不依赖 LineEdit 与 OnSubmit 的异步竞态。</summary>
-	private async Task SubmitLastDayTurnAsync(string text, bool clearInputAfter)
+	private async Task SubmitLastDayTurnAsync(string text)
 	{
 		if (_busy || _ending || IsLoadBlocking()) return;
 		var t = (text ?? "").Trim();
@@ -254,7 +330,7 @@ public partial class LastDayScreen : Control
 		}
 
 		await RunPlayerTurnAsync(t);
-		if (clearInputAfter && _input != null)
+		if (_input != null)
 			_input.Text = "";
 	}
 
@@ -355,12 +431,7 @@ public partial class LastDayScreen : Control
 		var label = b.Text?.Trim() ?? "";
 		if (string.IsNullOrEmpty(label)) return;
 		if (_input != null) _input.Text = label;
-		await SubmitLastDayTurnAsync(label, clearInputAfter: false);
-	}
-
-	private void OnCustomOption()
-	{
-		_input?.GrabFocus();
+		await SubmitLastDayTurnAsync(label);
 	}
 
 	private void ClearEncounterVisualState()
@@ -477,10 +548,10 @@ public partial class LastDayScreen : Control
 		SetOptionButton(_opt1, opts.Count > 0 ? opts[0].Label : "");
 		SetOptionButton(_opt2, opts.Count > 1 ? opts[1].Label : "");
 		SetOptionButton(_opt3, opts.Count > 2 ? opts[2].Label : "");
-		if (_optCustom != null)
+		if (_customHintLabel != null)
 		{
-			_optCustom.Visible = true;
-			_optCustom.Text = string.IsNullOrEmpty(n.CustomHint) ? "自定义输入…" : n.CustomHint;
+			_customHintLabel.Visible = true;
+			_customHintLabel.Text = string.IsNullOrEmpty(n.CustomHint) ? "自定义输入…" : n.CustomHint;
 		}
 	}
 
@@ -589,7 +660,7 @@ public partial class LastDayScreen : Control
 		if (_btnEndDialogue != null) _btnEndDialogue.Disabled = locked;
 		if (_btnPhone != null) _btnPhone.Disabled = locked || dlg;
 		if (_btnSpend != null) _btnSpend.Disabled = locked || dlg;
-		foreach (var b in new[] { _opt1, _opt2, _opt3, _optCustom })
+		foreach (var b in new[] { _opt1, _opt2, _opt3 })
 		{
 			if (b != null) b.Disabled = locked;
 		}
