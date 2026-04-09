@@ -29,6 +29,14 @@ public class NarrativeTurn
 	[JsonPropertyName("show_character_frame")]
 	public bool ShowCharacterFrame { get; set; } = true;
 
+	/// <summary>ambient / dialogue，与 <see cref="EncounterFrame.PresentationMode"/> 对齐。</summary>
+	[JsonPropertyName("presentation_mode")]
+	public string PresentationMode { get; set; } = "ambient";
+
+	/// <summary>是否为现场对话呈现（回应语义）。</summary>
+	[JsonIgnore]
+	public bool DialogueMode { get; set; }
+
 	public static NarrativeTurn Parse(string json)
 	{
 		var nt = new NarrativeTurn();

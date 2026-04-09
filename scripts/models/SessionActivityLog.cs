@@ -96,6 +96,25 @@ public class SessionActivityLog
 		});
 	}
 
+	/// <summary>现场面对面对话：opening / npc_line / player_reply / end_player / end_system。</summary>
+	public void AppendFaceToFaceDialogue(string phase, string sessionId, string locationId, string dialogueEvent,
+		string speaker, string speakerDisplayName, string text)
+	{
+		EnsureStarted();
+		Entries.Add(new ActivityEntry
+		{
+			Kind = ActivityKinds.FaceToFaceDialogue,
+			UnixMs = NowUnixMs(),
+			Phase = phase ?? "",
+			SessionId = sessionId ?? "",
+			LocationId = locationId ?? "",
+			DialogueEvent = dialogueEvent ?? "",
+			Speaker = speaker ?? "",
+			SpeakerDisplayName = speakerDisplayName ?? "",
+			Text = text ?? ""
+		});
+	}
+
 	public void AppendNote(string phase, string text)
 	{
 		EnsureStarted();
@@ -147,6 +166,7 @@ public static class ActivityKinds
 	public const string PhoneMessage = "phone_message";
 	public const string LocationVisit = "location_visit";
 	public const string LastDayTurn = "last_day_turn";
+	public const string FaceToFaceDialogue = "face_to_face_dialogue";
 	public const string Note = "note";
 }
 
@@ -188,4 +208,20 @@ public class ActivityEntry
 
 	[JsonPropertyName("location_name")]
 	public string LocationName { get; set; } = "";
+
+	/// <summary>face_to_face_dialogue：会话 id。</summary>
+	[JsonPropertyName("session_id")]
+	public string SessionId { get; set; } = "";
+
+	/// <summary>face_to_face_dialogue：opening / npc_line / player_reply / end_player / end_system。</summary>
+	[JsonPropertyName("dialogue_event")]
+	public string DialogueEvent { get; set; } = "";
+
+	/// <summary>face_to_face_dialogue：player / npc / system。</summary>
+	[JsonPropertyName("speaker")]
+	public string Speaker { get; set; } = "";
+
+	/// <summary>face_to_face_dialogue：说话者展示名（NPC 名或「你」）。</summary>
+	[JsonPropertyName("speaker_display_name")]
+	public string SpeakerDisplayName { get; set; } = "";
 }

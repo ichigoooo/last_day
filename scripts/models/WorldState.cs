@@ -50,6 +50,10 @@ public class WorldState
 	[JsonIgnore]
 	public EncounterFrame CurrentEncounterFrame { get; set; }
 
+	/// <summary>现场面对面对话活动会话（不入存档；新局由 <see cref="ResetForNewSession"/> 清空）。</summary>
+	[JsonIgnore]
+	public DialogueSession ActiveDialogueSession { get; set; }
+
 	/// <summary>场所 id → 已生成的 SVG 源码（内存缓存，不入存档）。旧路径兼容。</summary>
 	[JsonIgnore]
 	public Dictionary<string, string> LocationSvgCache { get; } = new();
@@ -83,6 +87,7 @@ public class WorldState
 		LastDayFreeformDestination = "";
 		LastDayDisplayPlaceName = "";
 		CurrentEncounterFrame = null;
+		ActiveDialogueSession = null;
 		LocationSvgCache.Clear();
 		SceneVisualSvgCache.Clear();
 		CharacterVisualSvgCache.Clear();

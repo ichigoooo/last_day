@@ -19,6 +19,7 @@ public partial class LastDayScreen : Control
 	private Button _optCustom;
 	private Label _phoneToast;
 	private Button _btnMap;
+	private Button _btnEndDialogue;
 	private Button _btnPhone;
 	private Button _btnSpend;
 	private ColorRect _bgTint;
@@ -65,6 +66,7 @@ public partial class LastDayScreen : Control
 		_optCustom = GetNodeOrNull<Button>("%OptionCustom");
 		_phoneToast = GetNodeOrNull<Label>("%PhoneToast");
 		_btnMap = GetNodeOrNull<Button>("%BtnOpenMap");
+		_btnEndDialogue = GetNodeOrNull<Button>("%BtnEndDialogue");
 		_btnPhone = GetNodeOrNull<Button>("%BtnOpenPhone");
 		_btnSpend = GetNodeOrNull<Button>("%BtnOpenSpend");
 		_mainVisual = GetNodeOrNull<Control>("%MainVisual");
@@ -88,6 +90,7 @@ public partial class LastDayScreen : Control
 		if (_optCustom != null) _optCustom.Pressed += OnCustomOption;
 
 		if (_btnMap != null) _btnMap.Pressed += () => _map?.Open();
+		if (_btnEndDialogue != null) _btnEndDialogue.Pressed += OnEndDialoguePressed;
 		if (_btnPhone != null) _btnPhone.Pressed += () => _phone?.Open();
 		if (_btnSpend != null) _btnSpend.Pressed += () => _spend?.Open();
 
@@ -106,6 +109,7 @@ public partial class LastDayScreen : Control
 
 		EnsureLoadOverlay();
 		_ = RefreshAmbientVisualsAsync();
+		ApplyPresentationModeUi();
 		SetProcess(true);
 	}
 
@@ -177,6 +181,7 @@ public partial class LastDayScreen : Control
 
 	private async void OnLocationPicked(string locationId)
 	{
+		if (GameManager.Instance?.Session.World.ActiveDialogueSession != null) return;
 		if (_busy || _ending || IsLoadBlocking()) return;
 		var loc = LocationManager.Instance;
 		if (loc == null || !loc.IsValidId(locationId)) return;
@@ -281,7 +286,67 @@ public partial class LastDayScreen : Control
 			SetLastDayInteractionLocked(false);
 			if (_submit != null) _submit.Disabled = false;
 			RefreshTitles();
+			ApplyPresentationModeUi();
 		}
+	}
+
+	private async void OnEndDialoguePressed()
+	{
+		if (_busy || _ending || IsLoadBlocking()) return;
+		if (GameManager.Instance?.Session.World.ActiveDialogueSession == null) return;
+		_busy = true;
+		SetLastDayInteractionLocked(true);
+		try
+		{
+			var result = LastDayDirector.EndFaceDialoguePlayerInitiated();
+			if (!result.Ok)
+			{
+				if (_narration != null) _narration.Text = result.Error;
+				return;
+			}
+
+			await ApplyEncounterUiAsync(result);
+			AudioManager.Instance?.PlaySfx(AudioManager.SfxUiSoft);
+		}
+		finally
+		{
+			_busy = false;
+			SetLastDayInteractionLocked(false);
+			ApplyPresentationModeUi();
+		}
+	}
+
+	/// <summary>根据是否处于现场对话会话，切换底部入口语义与禁用规则。</summary>
+	private void ApplyPresentationModeUi()
+	{
+		var dlg = GameManager.Instance?.Session.World.ActiveDialogueSession != null;
+		if (_btnEndDialogue != null)
+		{
+			_btnEndDialogue.Visible = dlg;
+			_btnEndDialogue.Disabled = false;
+		}
+
+		if (_btnMap != null)
+		{
+			_btnMap.Visible = true;
+			_btnMap.Disabled = dlg;
+		}
+
+		if (_btnPhone != null)
+			_btnPhone.Disabled = dlg;
+		if (_btnSpend != null)
+			_btnSpend.Disabled = dlg;
+
+		if (_input != null)
+		{
+			_input.PlaceholderText = dlg ? "输入你的回应…" : "输入你想做的事…";
+		}
+
+		if (_submit != null)
+			_submit.Text = dlg ? "回应" : "行动";
+
+		if (_portraitCard != null)
+			_portraitCard.SelfModulate = dlg ? new Color(1.06f, 1.04f, 1.1f, 1f) : Colors.White;
 	}
 
 	private async void OnOption(Button b)
@@ -398,6 +463,8 @@ public partial class LastDayScreen : Control
 				_portraitCard.Texture =
 					await VisualSvgService.GetCharacterTextureAsync(frame.CharacterRole, frame.CharacterVisualBrief);
 		}
+
+		ApplyPresentationModeUi();
 	}
 
 	private void ApplyNarrativeOnly(NarrativeTurn n)
@@ -517,9 +584,11 @@ public partial class LastDayScreen : Control
 	private void SetLastDayInteractionLocked(bool locked)
 	{
 		if (_submit != null) _submit.Disabled = locked;
-		if (_btnMap != null) _btnMap.Disabled = locked;
-		if (_btnPhone != null) _btnPhone.Disabled = locked;
-		if (_btnSpend != null) _btnSpend.Disabled = locked;
+		var dlg = GameManager.Instance?.Session.World.ActiveDialogueSession != null;
+		if (_btnMap != null) _btnMap.Disabled = locked || dlg;
+		if (_btnEndDialogue != null) _btnEndDialogue.Disabled = locked;
+		if (_btnPhone != null) _btnPhone.Disabled = locked || dlg;
+		if (_btnSpend != null) _btnSpend.Disabled = locked || dlg;
 		foreach (var b in new[] { _opt1, _opt2, _opt3, _optCustom })
 		{
 			if (b != null) b.Disabled = locked;

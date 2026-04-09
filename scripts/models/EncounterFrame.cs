@@ -19,6 +19,12 @@ public sealed class EncounterFrame
 	public string CharacterVisualBrief { get; set; } = "";
 	public bool ShowSceneImage { get; set; } = true;
 	public bool ShowCharacterFrame { get; set; }
+	/// <summary>ambient：环境遭遇；dialogue：现场面对面对话（本帧 <see cref="Narration"/> 视为对方发言为主文本）。</summary>
+	public string PresentationMode { get; set; } = "ambient";
+	/// <summary>为 true 时本回合应在运行态创建 <see cref="DialogueSession"/> 并进入对话模式。</summary>
+	public bool StartFaceToFaceDialogue { get; set; }
+	/// <summary>对话模式下可选的舞台/情境一句（淡语境，可与 <see cref="Narration"/> 分行展示）。</summary>
+	public string DialogueStageNote { get; set; } = "";
 	public string Narration { get; set; } = "";
 	public List<NarrativeOption> Options { get; set; } = new();
 	public string CustomHint { get; set; } = "";
@@ -40,6 +46,9 @@ public sealed class EncounterFrame
 			CharacterVisualBrief = "",
 			ShowSceneImage = true,
 			ShowCharacterFrame = false,
+			PresentationMode = "ambient",
+			StartFaceToFaceDialogue = false,
+			DialogueStageNote = "",
 			Narration = n,
 			Options =
 			[
@@ -64,8 +73,8 @@ public sealed class EncounterFrame
 		return s.Trim();
 	}
 
-	/// <summary>去掉模型常见的 markdown 代码围栏，并截取首个 <c>{</c> 到最后一个 <c>}</c>，避免整段响应无法 <see cref="JsonDocument.Parse"/>。</summary>
-	private static string PrepareJsonPayload(string raw)
+	/// <summary>去掉围栏并截取花括号对象片段，供遭遇帧与其它 LLM JSON 共用。</summary>
+	public static string PrepareLooseObjectJson(string raw)
 	{
 		if (string.IsNullOrWhiteSpace(raw)) return raw ?? "";
 		var s = StripMarkdownFencesOnly(raw);
@@ -77,6 +86,9 @@ public sealed class EncounterFrame
 		return s;
 	}
 
+	/// <summary>与 <see cref="PrepareLooseObjectJson"/> 相同（遭遇帧内部历史名称）。</summary>
+	private static string PrepareJsonPayload(string raw) => PrepareLooseObjectJson(raw);
+
 	public static EncounterFrame Parse(string json, string narrationFallback)
 	{
 		var def = CreateDefault(narrationFallback);
@@ -84,7 +96,7 @@ public sealed class EncounterFrame
 
 		var candidates = new[]
 		{
-			PrepareJsonPayload(json),
+			PrepareLooseObjectJson(json),
 			StripMarkdownFencesOnly(json).Trim(),
 			json.Trim()
 		};
@@ -146,6 +158,9 @@ public sealed class EncounterFrame
 				CharacterVisualBrief = ReadStr(root, "character_visual_brief", ""),
 				ShowSceneImage = ReadBool(root, "show_scene_image", true),
 				ShowCharacterFrame = ReadBool(root, "show_character_frame", false),
+				PresentationMode = NormalizePresentation(ReadStr(root, "presentation_mode", def.PresentationMode)),
+				StartFaceToFaceDialogue = ReadBool(root, "start_face_to_face_dialogue", false),
+				DialogueStageNote = ReadStr(root, "dialogue_stage_note", ""),
 				Narration = ReadStr(root, "narration", def.Narration),
 				CustomHint = ReadStr(root, "custom_hint", def.CustomHint)
 			};
@@ -227,7 +242,22 @@ public sealed class EncounterFrame
 			f.Narration = string.IsNullOrWhiteSpace(narrationFallback)
 				? CreateDefault("").Narration
 				: narrationFallback.Trim();
-		PadShortNarration(f);
+		if (IsDialoguePresentation(f))
+		{
+			f.PresentationMode = "dialogue";
+			f.ShowCharacterFrame = true;
+			f.StartFaceToFaceDialogue = true;
+		}
+		else if (f.StartFaceToFaceDialogue)
+		{
+			f.PresentationMode = "dialogue";
+			f.ShowCharacterFrame = true;
+		}
+
+		if (!IsDialoguePresentation(f))
+			PadShortNarration(f);
+		else
+			PadShortDialogueLine(f);
 		RemovePhoneGameplayOptions(f);
 		while (f.Options.Count < 3)
 		{
@@ -238,13 +268,28 @@ public sealed class EncounterFrame
 				Label = i == 0 ? "继续" : i == 1 ? "换一件事" : "停一会"
 			});
 		}
-		f.CustomHint = ContentSafetyFilter.ClampLastDayCustomHint(f.CustomHint ?? "");
-		if (LooksLikePhoneGameplayOption(f.CustomHint))
-			f.CustomHint = "也可以自己输入真正想做的事。";
-		if (string.IsNullOrWhiteSpace(f.CustomHint))
-			f.CustomHint = "也可以自己输入真正想做的事。";
+		if (IsDialoguePresentation(f))
+		{
+			f.CustomHint = ContentSafetyFilter.ClampLastDayCustomHint(f.CustomHint ?? "");
+			if (string.IsNullOrWhiteSpace(f.CustomHint))
+				f.CustomHint = "用一句话回应对方";
+			if (LooksLikePhoneGameplayOption(f.CustomHint))
+				f.CustomHint = "用一句话回应对方";
+		}
+		else
+		{
+			f.CustomHint = ContentSafetyFilter.ClampLastDayCustomHint(f.CustomHint ?? "");
+			if (LooksLikePhoneGameplayOption(f.CustomHint))
+				f.CustomHint = "也可以自己输入真正想做的事。";
+			if (string.IsNullOrWhiteSpace(f.CustomHint))
+				f.CustomHint = "也可以自己输入真正想做的事。";
+		}
+
 		return f;
 	}
+
+	private static bool IsDialoguePresentation(EncounterFrame f) =>
+		string.Equals(f.PresentationMode?.Trim(), "dialogue", StringComparison.OrdinalIgnoreCase);
 
 	public static void SanitizeForDisplay(EncounterFrame f)
 	{
@@ -254,6 +299,8 @@ public sealed class EncounterFrame
 			ContentSafetyFilter.SanitizeDisplay(f.EncounterSummary ?? ""));
 		f.CharacterName = ContentSafetyFilter.SanitizeDisplay(f.CharacterName ?? "");
 		f.CharacterRole = ContentSafetyFilter.SanitizeDisplay(f.CharacterRole ?? "");
+		f.DialogueStageNote = ContentSafetyFilter.NormalizeLastDayNoMetaPlayerYou(
+			ContentSafetyFilter.SanitizeDisplay(f.DialogueStageNote ?? ""));
 		f.Narration = ContentSafetyFilter.NormalizeLastDayNoMetaPlayerYou(
 			ContentSafetyFilter.SanitizeDisplay(f.Narration ?? ""));
 		f.CustomHint = ContentSafetyFilter.ClampLastDayCustomHint(ContentSafetyFilter.SanitizeDisplay(f.CustomHint ?? ""));
@@ -266,7 +313,12 @@ public sealed class EncounterFrame
 		var n = (Narration ?? "").Trim();
 		var sum = (EncounterSummary ?? "").Trim();
 		string body;
-		if (string.IsNullOrEmpty(n))
+		if (IsDialoguePresentation(this))
+		{
+			var st = (DialogueStageNote ?? "").Trim();
+			body = string.IsNullOrEmpty(st) ? n : $"{st}\n\n{n}";
+		}
+		else if (string.IsNullOrEmpty(n))
 			body = sum;
 		else if (string.IsNullOrEmpty(sum) || sum == n || n.Contains(sum, StringComparison.Ordinal) ||
 		         sum.Contains(n, StringComparison.Ordinal))
@@ -279,13 +331,15 @@ public sealed class EncounterFrame
 			Narration = body,
 			Options = Options,
 			CustomHint = CustomHint,
-			ShowCharacterFrame = ShowCharacterFrame
+			ShowCharacterFrame = ShowCharacterFrame,
+			PresentationMode = PresentationMode,
+			DialogueMode = IsDialoguePresentation(this)
 		};
 	}
 
 	public static string BuildFallbackJson()
 	{
-		return "{\"place_name\":\"此处\",\"arrival_mode\":\"symbolic\",\"encounter_type\":\"pause\",\"encounter_summary\":\"\",\"character_name\":\"\",\"character_role\":\"\",\"scene_visual_brief\":\"室内一角，安静、低饱和\",\"character_visual_brief\":\"\",\"show_scene_image\":true,\"show_character_frame\":false,\"narration\":\"时间从指缝里滑过去，你没再多说什么。\",\"options\":[{\"slot\":\"face\",\"label\":\"继续把事做完\"},{\"slot\":\"deflect\",\"label\":\"先转开注意力\"},{\"slot\":\"pause\",\"label\":\"停下来发呆一会\"}],\"custom_hint\":\"也可以自己输入真正想做的事。\"}";
+		return "{\"place_name\":\"此处\",\"arrival_mode\":\"symbolic\",\"encounter_type\":\"pause\",\"encounter_summary\":\"\",\"character_name\":\"\",\"character_role\":\"\",\"scene_visual_brief\":\"室内一角，安静、低饱和\",\"character_visual_brief\":\"\",\"show_scene_image\":true,\"show_character_frame\":false,\"presentation_mode\":\"ambient\",\"start_face_to_face_dialogue\":false,\"dialogue_stage_note\":\"\",\"narration\":\"时间从指缝里滑过去，你没再多说什么。\",\"options\":[{\"slot\":\"face\",\"label\":\"继续把事做完\"},{\"slot\":\"deflect\",\"label\":\"先转开注意力\"},{\"slot\":\"pause\",\"label\":\"停下来发呆一会\"}],\"custom_hint\":\"也可以自己输入真正想做的事。\"}";
 	}
 
 	private static string ReadStr(JsonElement root, string name, string def)
@@ -319,6 +373,21 @@ public sealed class EncounterFrame
 		"real" or "symbolic" or "blocked_at_door" or "memory_projection" or "unreachable_today" => v,
 		_ => "symbolic"
 	};
+
+	private static string NormalizePresentation(string v)
+	{
+		var t = (v ?? "").Trim().ToLowerInvariant();
+		return t == "dialogue" ? "dialogue" : "ambient";
+	}
+
+	/// <summary>对话主对白若过短则补一层停顿感（与 ambient 的 PadShortNarration 区分）。</summary>
+	private static void PadShortDialogueLine(EncounterFrame f)
+	{
+		var n = (f.Narration ?? "").Trim();
+		if (n.Length >= 24) return;
+		if (string.IsNullOrEmpty(n)) return;
+		f.Narration = n + " 对方的声音贴得很近，你仍能听见自己心跳在耳廓里敲了一下。";
+	}
 
 	/// <summary>模型偶发只给一句短旁白时，补一层感官尾巴，避免 MUD 区空白感（不改变已足够长的文本）。</summary>
 	private static void PadShortNarration(EncounterFrame f)

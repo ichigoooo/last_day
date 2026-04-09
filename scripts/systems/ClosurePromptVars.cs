@@ -42,6 +42,17 @@ public static class ClosurePromptVars
 			sb.AppendLine("近期回合：" + string.Join(" | ", w.RecentTurnLines.Take(12)));
 		if (w.MomentsLines is { Count: > 0 })
 			sb.AppendLine("片刻：" + string.Join(" | ", w.MomentsLines.Take(8)));
+		var ff = 0;
+		if (session.ActivityLog?.Entries != null)
+		{
+			foreach (var e in session.ActivityLog.Entries)
+			{
+				if (e.Kind == ActivityKinds.FaceToFaceDialogue) ff++;
+			}
+		}
+
+		if (ff > 0)
+			sb.AppendLine($"现场面对面对话记录条数：{ff}");
 		sb.AppendLine($"到访场所数：{w.VisitedLocationIds?.Count ?? 0}");
 		return sb.ToString().Trim();
 	}

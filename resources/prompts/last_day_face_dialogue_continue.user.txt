@@ -1,0 +1,30 @@
+请根据玩家的上一句回应，续写现场面对面对话的下一轮 JSON。
+
+【会话 id】
+{{session_id}}
+
+【地点】
+{{place_name}}（{{location_id}}）
+
+【冻结的会话对象】
+姓名：{{character_name}}
+身份/关系：{{character_role}}
+视觉 brief（剪影）：{{character_visual_brief}}
+
+【会话摘要（系统维护，勿改写事实）】
+{{dialogue_summary}}
+
+【最近往来片段】
+{{recent_exchange}}
+
+【玩家上一句回应】
+{{player_reply}}
+
+【当前时间】
+{{current_time}}
+
+【最近叙事摘要】
+{{story_summary}}
+
+【灵魂画像】
+{{soul_tags}} / {{work_excerpt}} / {{relation_excerpt}} / {{escape_excerpt}}

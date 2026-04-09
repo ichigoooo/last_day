@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[node name="LastDayDialogueManualChecklist" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -200.0
+offset_right = 420.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "最后一天 · 现场对话模式 — 手动验收入口
+
+在 Godot 中请直接运行主流程场景 res://scenes/last_day.tscn（或从主菜单进入最后一天）。
+
+验收要点：
+1）在已配置 LLM API 时，普通行动回合若遭遇帧进入 dialogue，应出现对方发言、三颗「回应」选项与「结束对话」。
+2）对话期间「前往场所」「手机」「死神花钱」应不可用；结束对话或自然结束后应恢复。
+3）续聊若干轮后，活动日志 JSON（设置/悼词链路）中应出现 face_to_face_dialogue 记录。
+
+本场景仅作说明占位，不包含自动测试逻辑。"
+autowrap_mode = 3

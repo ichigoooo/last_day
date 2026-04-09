@@ -16,7 +16,12 @@
 - `real` `symbolic` `blocked_at_door` `memory_projection` `unreachable_today`
 
 输出字段（全部出现）：
-`place_name` `arrival_mode` `encounter_type` `encounter_summary` `character_name` `character_role` `scene_visual_brief` `character_visual_brief` `show_scene_image` `show_character_frame` `narration` `options`（恰好 3 条，含 slot 与 label） `custom_hint`
+`place_name` `arrival_mode` `encounter_type` `encounter_summary` `character_name` `character_role` `scene_visual_brief` `character_visual_brief` `show_scene_image` `show_character_frame` `presentation_mode` `start_face_to_face_dialogue` `dialogue_stage_note` `narration` `options`（恰好 3 条，含 slot 与 label） `custom_hint`
+
+关于现场面对面对话（`presentation_mode`）：
+- `presentation_mode` 取 `ambient` 或 `dialogue`。`ambient`：延续既有「环境遭遇 + 行动选项」；`dialogue`：本回合以**当面对话**为主——`narration` 必须写成**对方直接对你说的话**（口语对白），不要用旁观式第三人称复述「他对你说……」。
+- 当且仅当 `presentation_mode` 为 `dialogue` 时：将 `start_face_to_face_dialogue` 设为 true；`show_character_frame` 必须为 true；`character_*` 必须非空；`options` 的三条 label 必须是**玩家口头回应**的短句（接话），禁止写成移动/旅行/花钱/掏手机；`custom_hint` 写回应语义（如「用一句话回应对方」），不要写行动语义。
+- `dialogue_stage_note` 可选：一句极淡的舞台/距离感提示（可为空）；不要把大段环境描写塞进 `custom_hint`。
 
 关于 `narration`（必读，MUD 式反馈）：
 - `narration` 必须是 **至少 3 句中文**，总长度建议 **不少于 80 字**（除非本回合确实无可写）。

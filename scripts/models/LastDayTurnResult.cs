@@ -9,4 +9,6 @@ public class LastDayTurnResult
 	public NarrativeTurn Narrative { get; set; } = new();
 	public ResolvedAction Resolved { get; set; } = new();
 	public string IntentSummary { get; set; } = "";
+	/// <summary>本回合是否关闭了面对面对话并回到 ambient（用于 UI 一次性格式化恢复）。</summary>
+	public bool ClosedFaceToFaceDialogue { get; set; }
 }
