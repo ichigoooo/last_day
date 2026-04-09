@@ -44,6 +44,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 28
 
+[node name="TopSpacer" type="Control" parent="Margin/VBox" unique_id=601000001]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="Title" type="Label" parent="Margin/VBox" unique_id=657228651]
 layout_mode = 2
 theme_override_font_sizes/font_size = 44
@@ -87,3 +91,7 @@ theme_override_styles/pressed = ExtResource("4_tefeu")
 theme_override_styles/hover = ExtResource("4_tefeu")
 theme_override_styles/disabled = ExtResource("4_tefeu")
 text = "测试 API 连通"
+
+[node name="BottomSpacer" type="Control" parent="Margin/VBox" unique_id=601000002]
+layout_mode = 2
+size_flags_vertical = 3
