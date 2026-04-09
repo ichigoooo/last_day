@@ -1,0 +1,15 @@
+请根据以下内容生成 3 条墓志铭候选。
+
+【本局核心遗愿（宣判阶段确认）】
+{{final_wish}}
+
+【死因裁定】
+{{death_cause}}
+
+【本局摘要】
+{{session_summary}}
+
+【用户原话】
+工作：{{work}}
+关系：{{relation}}
+逃避：{{escape}}

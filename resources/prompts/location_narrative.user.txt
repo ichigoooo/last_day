@@ -1,0 +1,21 @@
+这是兼容旧 prompt id `location_narrative` 的用户模板，语义等同于 `last_day_narrative_render.user.txt`。
+
+请根据系统已结算的行动结果，生成一段场景旁白和三个选项文案。
+
+【当前地点】
+{{current_location}}
+
+【当前时间】
+{{current_time}}
+
+【本局核心遗愿（宣判阶段确认）】
+{{final_wish}}
+
+【叙事摘要】
+{{story_summary}}
+
+【玩家原始输入】
+{{player_input}}
+
+【系统已结算动作】
+{{resolved_action_json}}

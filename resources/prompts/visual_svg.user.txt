@@ -1,0 +1,25 @@
+请生成一段用于游戏 UI 的 SVG。
+
+【主题类型】
+{{subject_kind}}
+
+【主题名称】
+{{subject_name}}
+
+【主题描述】
+{{subject_description}}
+
+【情绪与氛围】
+{{mood}}
+
+【viewBox】
+{{view_box}}
+
+【调色板】
+{{palette}}
+
+【路径复杂度上限】
+{{max_paths}}
+
+【附加约束】
+{{extra_constraints}}

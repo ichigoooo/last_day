@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8svgtest01demo"]
+
+[ext_resource type="Script" path="res://scenes/tests/svg_plugin_test.gd" id="1_root"]
+[ext_resource type="Script" path="res://addons/merovi.svgtexture2d/svg_sprite_2d.gd" id="2_svg_sprite"]
+
+[node name="SvgPluginTest" type="Node2D"]
+script = ExtResource("1_root")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(540, 960)
+
+[node name="SVGSprite2D" type="Sprite2D" parent="."]
+script = ExtResource("2_svg_sprite")

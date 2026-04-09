@@ -1,0 +1,15 @@
+请为玩家刚发出的朋友圈生成 3 条评论。
+
+【帖子正文】
+{{post_text}}
+
+【可出现的评论者】
+{{candidate_commenters}}
+
+【今天的叙事摘要】
+{{story_summary}}
+
+【用户三问摘要】
+工作：{{work}}
+关系：{{relation}}
+逃避：{{escape}}

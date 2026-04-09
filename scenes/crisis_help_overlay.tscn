@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://crisis_help_overlay_01"]
+
+[ext_resource type="Script" path="res://scripts/ui/CrisisHelpOverlay.cs" id="1_script"]
+
+[node name="CrisisHelpOverlay" type="CanvasLayer"]
+layer = 200
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.06, 0.07, 0.1, 0.94)
+
+[node name="Center" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 52
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 52
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Title" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "你值得被倾听"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "我们注意到你输入了可能伤害自己的内容。本体验在此中止。
+
+如果你正感到痛苦或危机，请联系专业支持：
+
+心理援助热线：400-161-9995
+（24 小时，免费）"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BackMainButton" type="Button" parent="Center/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "返回主菜单"

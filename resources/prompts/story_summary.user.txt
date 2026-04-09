@@ -1,0 +1,13 @@
+请把下面这些最近回合记录压缩成一条可续写的叙事摘要。
+
+【本局核心遗愿（宣判阶段确认）】
+{{final_wish}}
+
+【上一条长期摘要】
+{{previous_summary}}
+
+【最近回合记录】
+{{recent_turns}}
+
+【灵魂画像】
+{{soul_tags}}；{{work_excerpt}}；{{relation_excerpt}}；{{escape_excerpt}}

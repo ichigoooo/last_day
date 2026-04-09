@@ -1,0 +1,133 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh7k2n1w4xq0"]
+
+[ext_resource type="Script" path="res://scripts/ui/VerdictScreen.cs" id="1_v"]
+
+[node name="Root" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_v")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 44
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 44
+
+[node name="Outer" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="TitleLabel" type="Label" parent="Margin/Outer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "死因宣判"
+horizontal_alignment = 1
+
+[node name="PaperPanel" type="PanelContainer" parent="Margin/Outer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Inner" type="VBoxContainer" parent="Margin/Outer/PaperPanel"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="H1" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "裁定死因"
+horizontal_alignment = 1
+
+[node name="DeathCauseLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+autowrap_mode = 3
+
+[node name="H2" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "死神开场白"
+horizontal_alignment = 1
+
+[node name="OpeningLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+autowrap_mode = 3
+
+[node name="H3" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+layout_mode = 2
+text = "最后一天遗愿（可自填）"
+horizontal_alignment = 1
+
+[node name="WishEdit" type="TextEdit" parent="Margin/Outer/PaperPanel/Inner"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+placeholder_text = "写下一句你想完成的事…"
+
+[node name="WishHintLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.35, 0.35, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SuggestButton" type="Button" parent="Margin/Outer/PaperPanel/Inner"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "没有想法 · 生成三条建议"
+
+[node name="SuggestionRow" type="HBoxContainer" parent="Margin/Outer/PaperPanel/Inner"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="WishSuggest1" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="WishSuggest2" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="WishSuggest3" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="BottomRow" type="HBoxContainer" parent="Margin/Outer"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 28
+
+[node name="ConfirmButton" type="Button" parent="Margin/Outer/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "确认遗愿 · 进入最后一天"
+
+[node name="BackButton" type="Button" parent="Margin/Outer/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "返回主菜单"

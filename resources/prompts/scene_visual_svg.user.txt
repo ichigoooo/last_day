@@ -1,0 +1,13 @@
+请根据 brief 生成场景 SVG。
+
+【场景视觉 brief】
+{{visual_brief}}
+
+【viewBox】
+{{view_box}}
+
+【调色板】
+{{palette}}
+
+【路径复杂度上限】
+{{max_paths}}

@@ -1,0 +1,16 @@
+请根据这一局的完整记录，生成终局总结所需的结构化文案。
+
+【灵魂画像】
+标签：{{tags}}
+工作：{{work}}
+关系：{{relation}}
+逃避：{{escape}}
+
+【本局核心遗愿（宣判阶段确认）】
+{{final_wish}}
+
+【死因裁定】
+{{death_cause}}
+
+【本局完整日志 JSON】
+{{activity_log_json}}

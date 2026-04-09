@@ -1,0 +1,19 @@
+请把玩家想去的地方，映射到已知地点列表中的一个 canonical location。
+
+【当前地点】
+{{current_location}}
+
+【可用地点列表】
+{{available_locations}}
+
+【玩家输入的目的地】
+{{destination_text}}
+
+【本局核心遗愿（宣判阶段确认）】
+{{final_wish}}
+
+【叙事摘要】
+{{story_summary}}
+
+【灵魂画像摘要】
+标签：{{soul_tags}}；工作：{{work_excerpt}}；关系：{{relation_excerpt}}；逃避：{{escape_excerpt}}

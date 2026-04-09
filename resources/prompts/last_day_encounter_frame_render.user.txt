@@ -1,0 +1,43 @@
+请生成本回合的遭遇呈现 JSON。系统已结算完毕，请以结算后的世界状态为准写旁白，不要编造资源数值。
+
+【当前 canonical 地点（系统）】
+{{current_location}}
+
+【玩家原话】
+{{player_input}}
+
+【解析得到的目的地文本】
+{{destination_text}}
+
+【是否为旅行/前往类意图】
+{{is_travel_intent}}
+
+【未能映射到目录地点时的原文（可能为空）】
+{{freeform_destination_text}}
+
+【意图摘要】
+{{intent_summary}}
+
+【系统裁决摘要 JSON】
+{{resolved_action_json}}
+
+【当前时间】
+{{current_time}}
+
+【当前余额】
+{{current_money}}
+
+【当前电量】
+{{current_battery}}
+
+【本局核心遗愿】
+{{final_wish}}
+
+【最近叙事摘要】
+{{story_summary}}
+
+【灵魂画像】
+{{soul_tags}} / {{work_excerpt}} / {{relation_excerpt}} / {{escape_excerpt}}
+
+【本回合系统随机呈现倾向】（请严格遵循上方 system 中对「同框人物优先 / 独处氛围优先」的说明）
+{{encounter_presence_hint}}

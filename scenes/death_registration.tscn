@@ -1,0 +1,147 @@
+[gd_scene load_steps=3 format=3 uid="uid://tmitl3ytf5hy"]
+
+[ext_resource type="Script" path="res://scripts/ui/DeathRegistrationScreen.cs" id="1_dr"]
+[ext_resource type="Script" path="res://scripts/ui/TypewriterLabel.cs" id="2_tw"]
+
+[node name="Root" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dr")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 24
+
+[node name="MainCol" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="Margin/MainCol"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "入殓登记"
+horizontal_alignment = 1
+
+[node name="FormBlock" type="PanelContainer" parent="Margin/MainCol"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FormVBox" type="VBoxContainer" parent="Margin/MainCol/FormBlock"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/MainCol/FormBlock/FormVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Fields" type="VBoxContainer" parent="Margin/MainCol/FormBlock/FormVBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="L1" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "工作与生存"
+
+[node name="WorkEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 168)
+layout_mode = 2
+size_flags_vertical = 0
+placeholder_text = "写下你与工作、生计、职场相关的真实碎片…"
+
+[node name="L2" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "关系与羁绊"
+
+[node name="RelationEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 168)
+layout_mode = 2
+size_flags_vertical = 0
+placeholder_text = "家人、恋人、朋友……谁还在你的通讯录里发烫？"
+
+[node name="L3" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "逃避与自我"
+
+[node name="EscapeEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 168)
+layout_mode = 2
+size_flags_vertical = 0
+placeholder_text = "你用什么麻醉自己？又在躲什么？"
+
+[node name="SubmitButton" type="Button" parent="Margin/MainCol/FormBlock/FormVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "提交登记"
+
+[node name="StatusLabel" type="Label" parent="Margin/MainCol"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="AnnotationBlock" type="VBoxContainer" parent="Margin/MainCol"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="AnnTitle" type="Label" parent="Margin/MainCol/AnnotationBlock"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "死神批注"
+horizontal_alignment = 1
+
+[node name="AnnotationTypewriter" type="Label" parent="Margin/MainCol/AnnotationBlock"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 148)
+layout_mode = 2
+size_flags_vertical = 3
+autowrap_mode = 3
+script = ExtResource("2_tw")
+
+[node name="AnnButtons" type="HBoxContainer" parent="Margin/MainCol/AnnotationBlock"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="SkipTypingButton" type="Button" parent="Margin/MainCol/AnnotationBlock/AnnButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "跳过打字"
+
+[node name="ContinueVerdictButton" type="Button" parent="Margin/MainCol/AnnotationBlock/AnnButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "前往宣判"
+
+[node name="BackButton" type="Button" parent="Margin/MainCol"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "返回主菜单"

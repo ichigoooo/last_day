@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- LLM-style SVG test: hourglass motif, ASCII only -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="rim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6b7f99"/>
+      <stop offset="100%" stop-color="#3d2a2e"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c9a962" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#5c4a32" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="20" fill="#0c0d11"/>
+  <circle cx="128" cy="128" r="108" fill="none" stroke="url(#rim)" stroke-width="5" opacity="0.9"/>
+  <path d="M 128 52 L 128 204" stroke="#8a9aad" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <path d="M 88 96 L 168 96 L 128 128 Z" fill="url(#sand)" opacity="0.9"/>
+  <path d="M 88 160 L 168 160 L 128 128 Z" fill="url(#sand)" opacity="0.55"/>
+  <circle cx="128" cy="128" r="6" fill="#c9a962"/>
+  <path d="M 52 128 A 76 76 0 0 1 204 128" fill="none" stroke="#8b5a5e" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  <text x="128" y="236" text-anchor="middle" font-size="13" fill="#6a7a8c" font-family="sans-serif">LLM SVG test</text>
+</svg>

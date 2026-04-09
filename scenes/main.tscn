@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://cfi6jmue01gm6"]
+
+[ext_resource type="Script" uid="uid://7mux8bnc4nmt" path="res://scenes/Main.cs" id="1_o5qli"]
+
+[node name="Main" type="Control" unique_id=1428896931]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o5qli")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=969701289]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 56
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 56
+
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=309724827]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 28
+
+[node name="Title" type="Label" parent="Margin/VBox" unique_id=657228651]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "人生最后一天"
+horizontal_alignment = 1
+
+[node name="HintLabel" type="Label" parent="Margin/VBox" unique_id=1846511024]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ButtonRow" type="HBoxContainer" parent="Margin/VBox" unique_id=1624219264]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="OpenSettingsButton" type="Button" parent="Margin/VBox/ButtonRow" unique_id=918115823]
+unique_name_in_owner = true
+layout_mode = 2
+text = "API 设置"
+
+[node name="StartFlowButton" type="Button" parent="Margin/VBox/ButtonRow" unique_id=258233965]
+unique_name_in_owner = true
+layout_mode = 2
+text = "开始体验"
+
+[node name="TestApiButton" type="Button" parent="Margin/VBox" unique_id=429560309]
+unique_name_in_owner = true
+layout_mode = 2
+text = "测试 API 连通"

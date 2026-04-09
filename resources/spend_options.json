@@ -1,0 +1,26 @@
+[
+	{
+		"id": "flowers",
+		"name": "给妈妈订一束花",
+		"description": "让花在日落前送到门口",
+		"amount": 268
+	},
+	{
+		"id": "donation",
+		"name": "捐一笔小额善款",
+		"description": "以你的名字，匿名",
+		"amount": 200
+	},
+	{
+		"id": "meal",
+		"name": "最后一顿像样一点的饭",
+		"description": "点一份你平时舍不得的菜",
+		"amount": 380
+	},
+	{
+		"id": "taxi",
+		"name": "打车穿过半座城",
+		"description": "不为省时，只为少淋一点雨",
+		"amount": 120
+	}
+]

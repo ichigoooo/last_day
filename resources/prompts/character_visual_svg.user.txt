@@ -1,0 +1,16 @@
+请生成人物剪影 SVG。
+
+【角色/关系关键词】
+{{character_role}}
+
+【人物视觉 brief】
+{{visual_brief}}
+
+【viewBox】
+{{view_box}}
+
+【调色板】
+{{palette}}
+
+【路径复杂度上限】
+{{max_paths}}

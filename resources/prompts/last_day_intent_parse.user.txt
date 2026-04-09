@@ -1,0 +1,32 @@
+请解析玩家在“最后一天”里此刻的行动意图。
+
+只做理解，不要写叙事，不要替系统做资源结算。
+
+【当前地点】
+{{current_location}}
+
+【可用地点 id 列表】
+{{available_location_ids}}
+
+【当前时间】
+{{current_time}}
+
+【当前余额】
+{{current_money}}
+
+【当前电量】
+{{current_battery}}
+
+【本局核心遗愿（宣判阶段确认）】
+{{final_wish}}
+
+【最近叙事摘要】
+{{story_summary}}
+
+【玩家原话】
+{{player_input}}
+
+（请据此填写 `destination_text`：若与地点无关，可概括当前行为焦点。）
+
+【灵魂画像】
+{{soul_tags}} / {{work_excerpt}} / {{relation_excerpt}} / {{escape_excerpt}}

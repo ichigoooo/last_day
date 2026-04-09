@@ -1,0 +1,13 @@
+[remap]
+
+importer="merovi.svgtexture2d"
+type="SVGTexture2D"
+uid="uid://ce5tr3lr8anwr"
+valid=false
+
+[deps]
+
+source_file="res://resources/spend_options.json"
+
+[params]
+

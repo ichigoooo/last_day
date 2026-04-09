@@ -1,0 +1,24 @@
+请生成一张“场所卡片 SVG”。
+
+【场所 id】
+{{location_id}}
+
+【场所名称】
+{{location_name}}
+
+【场所标签】
+{{location_tags}}
+
+【场所气质】
+{{location_mood}}
+
+【viewBox】
+{{view_box}}
+
+【调色板】
+{{palette}}
+
+【路径复杂度上限】
+{{max_paths}}
+
+请输出一段可直接被 SVG 解析器读取的原始 `<svg>` 文本。

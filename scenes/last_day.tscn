@@ -1,0 +1,449 @@
+[gd_scene format=3 uid="uid://b3vq8m2oaxp1"]
+
+[ext_resource type="Script" uid="uid://ctlrdp7thklp" path="res://scripts/ui/LastDayScreen.cs" id="1_lastday"]
+[ext_resource type="Script" uid="uid://bmtmsxogab3p8" path="res://scripts/ui/StatusBar.cs" id="2_status"]
+[ext_resource type="Script" uid="uid://damwgv1f4vxxv" path="res://scripts/ui/ClockArcControl.cs" id="3_clock"]
+[ext_resource type="Script" uid="uid://81ck0lhnyu0d" path="res://scripts/ui/PhoneUI.cs" id="4_phone"]
+[ext_resource type="Script" uid="uid://b57qo107fxhhi" path="res://scripts/ui/DeathSpendUI.cs" id="5_spend"]
+[ext_resource type="Script" uid="uid://cno58e52sqevt" path="res://scripts/ui/LocationMapOverlay.cs" id="6_map"]
+[ext_resource type="Script" uid="uid://canpxi36m5aa3" path="res://scripts/ui/LastDayDyingFx.cs" id="7_dyfx"]
+
+[node name="Root" type="Control" unique_id=1678223051]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lastday")
+
+[node name="BgTint" type="ColorRect" parent="." unique_id=778186663]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.08, 0.085, 0.1, 0.94)
+
+[node name="M" type="MarginContainer" parent="." unique_id=81732851]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="MainColumn" type="VBoxContainer" parent="M" unique_id=1152571041]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="StatusBar" type="PanelContainer" parent="M/MainColumn" unique_id=8827303]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("2_status")
+
+[node name="HBox" type="HBoxContainer" parent="M/MainColumn/StatusBar" unique_id=1553790701]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ClockArc" type="Control" parent="M/MainColumn/StatusBar/HBox" unique_id=808468173]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+script = ExtResource("3_clock")
+
+[node name="TimeCol" type="VBoxContainer" parent="M/MainColumn/StatusBar/HBox" unique_id=1891642135]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="BarTimeLabel" type="Label" parent="M/MainColumn/StatusBar/HBox/TimeCol" unique_id=1025878950]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "08:00"
+
+[node name="BarPhaseLabel" type="Label" parent="M/MainColumn/StatusBar/HBox/TimeCol" unique_id=1303142228]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.6, 0.68, 1)
+theme_override_font_sizes/font_size = 22
+text = "清晨"
+
+[node name="Spacer" type="Control" parent="M/MainColumn/StatusBar/HBox" unique_id=706071679]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResCol" type="VBoxContainer" parent="M/MainColumn/StatusBar/HBox" unique_id=2076853156]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="BarMoneyLabel" type="Label" parent="M/MainColumn/StatusBar/HBox/ResCol" unique_id=1917640436]
+unique_name_in_owner = true
+layout_mode = 2
+text = "现金 5000 元"
+horizontal_alignment = 2
+
+[node name="BatteryBar" type="ProgressBar" parent="M/MainColumn/StatusBar/HBox/ResCol" unique_id=728026123]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 28)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+
+[node name="Toolbar" type="HBoxContainer" parent="M/MainColumn" unique_id=1459697453]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="BtnOpenMap" type="Button" parent="M/MainColumn/Toolbar" unique_id=761515341]
+unique_name_in_owner = true
+layout_mode = 2
+text = "前往场所"
+
+[node name="LocationTitle" type="Label" parent="M/MainColumn/Toolbar" unique_id=102432041]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "家"
+horizontal_alignment = 1
+
+[node name="MainVisual" type="PanelContainer" parent="M/MainColumn" unique_id=2067195994]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VisualRow" type="HBoxContainer" parent="M/MainColumn/MainVisual" unique_id=1876673210]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SceneCard" type="TextureRect" parent="M/MainColumn/MainVisual/VisualRow" unique_id=625512723]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PortraitCard" type="TextureRect" parent="M/MainColumn/MainVisual/VisualRow" unique_id=873304339]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CharacterCaption" type="Label" parent="M/MainColumn/MainVisual" unique_id=571009546]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.66, 0.74, 1)
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SummaryLabel" type="Label" parent="M/MainColumn" unique_id=786985247]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "叙事摘要：（尚未压缩）"
+autowrap_mode = 3
+
+[node name="OptionsColumn" type="VBoxContainer" parent="M/MainColumn" unique_id=1842409085]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OptionButton1" type="Button" parent="M/MainColumn/OptionsColumn" unique_id=1346636886]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="OptionButton2" type="Button" parent="M/MainColumn/OptionsColumn" unique_id=1813515156]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="OptionButton3" type="Button" parent="M/MainColumn/OptionsColumn" unique_id=1605149589]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="OptionCustom" type="Button" parent="M/MainColumn/OptionsColumn" unique_id=1723402432]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "自定义输入…"
+autowrap_mode = 3
+
+[node name="NarrationScroll" type="ScrollContainer" parent="M/MainColumn" unique_id=842048501]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NarrationLabel" type="RichTextLabel" parent="M/MainColumn/NarrationScroll" unique_id=317755680]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "描述与氛围会出现在这里。可在上方选一个姿态，或在下面输入你想做的事。"
+
+[node name="InputRow" type="HBoxContainer" parent="M/MainColumn" unique_id=1907960059]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AvatarStub" type="ColorRect" parent="M/MainColumn/InputRow" unique_id=1795477485]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+color = Color(0.2, 0.22, 0.28, 1)
+
+[node name="PlayerInput" type="LineEdit" parent="M/MainColumn/InputRow" unique_id=1089179599]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "用一句话说出此刻想做的事…"
+
+[node name="SubmitButton" type="Button" parent="M/MainColumn/InputRow" unique_id=456980554]
+unique_name_in_owner = true
+layout_mode = 2
+text = "行动"
+
+[node name="PhoneToast" type="Label" parent="M/MainColumn" unique_id=2138488598]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.65, 0.78, 1)
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 3
+
+[node name="ToolRow" type="HBoxContainer" parent="M/MainColumn" unique_id=701361721]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BtnOpenPhone" type="Button" parent="M/MainColumn/ToolRow" unique_id=624430169]
+unique_name_in_owner = true
+layout_mode = 2
+text = "手机"
+
+[node name="BtnOpenSpend" type="Button" parent="M/MainColumn/ToolRow" unique_id=780172522]
+unique_name_in_owner = true
+layout_mode = 2
+text = "死神花钱"
+
+[node name="NavRow" type="HBoxContainer" parent="M/MainColumn" unique_id=55540391]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="BackButton" type="Button" parent="M/MainColumn/NavRow" unique_id=59416131]
+unique_name_in_owner = true
+layout_mode = 2
+text = "返回主菜单"
+
+[node name="NextButton" type="Button" parent="M/MainColumn/NavRow" unique_id=1150207928]
+unique_name_in_owner = true
+layout_mode = 2
+text = "下一阶段"
+
+[node name="PhoneLayer" type="CanvasLayer" parent="." unique_id=968657411]
+unique_name_in_owner = true
+layer = 90
+script = ExtResource("4_phone")
+
+[node name="PhoneRoot" type="Panel" parent="PhoneLayer" unique_id=34864935]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 80.0
+offset_right = -24.0
+offset_bottom = -80.0
+
+[node name="PMargin" type="MarginContainer" parent="PhoneLayer/PhoneRoot" unique_id=1538598681]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="PVBox" type="VBoxContainer" parent="PhoneLayer/PhoneRoot/PMargin" unique_id=443031219]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PhoneClose" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=558294105]
+unique_name_in_owner = true
+layout_mode = 2
+text = "关闭"
+
+[node name="PhoneChat" type="RichTextLabel" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=1285457654]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 280)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PhoneSendInput" type="LineEdit" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=965137091]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "发一条消息…"
+
+[node name="PhoneSendBtn" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=1255362654]
+unique_name_in_owner = true
+layout_mode = 2
+text = "发送"
+
+[node name="PowerBankBtn" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=582291962]
+unique_name_in_owner = true
+layout_mode = 2
+text = "充电宝（约 1 小时游戏时间）"
+
+[node name="PhoneHint" type="Label" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=332946054]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 3
+
+[node name="MomentsTitle" type="Label" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=534719072]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "朋友圈"
+
+[node name="MomentsInput" type="LineEdit" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=275678415]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "发一条朋友圈…"
+
+[node name="MomentsPost" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=476642425]
+unique_name_in_owner = true
+layout_mode = 2
+text = "发布"
+
+[node name="MomentsList" type="ItemList" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=1969700381]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+
+[node name="SpendLayer" type="CanvasLayer" parent="." unique_id=2139667414]
+unique_name_in_owner = true
+layer = 91
+script = ExtResource("5_spend")
+
+[node name="SpendRoot" type="Panel" parent="SpendLayer" unique_id=1669029285]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 120.0
+offset_right = -32.0
+offset_bottom = -120.0
+
+[node name="SMargin" type="MarginContainer" parent="SpendLayer/SpendRoot" unique_id=641982004]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="SVBox" type="VBoxContainer" parent="SpendLayer/SpendRoot/SMargin" unique_id=1618157828]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SpendClose" type="Button" parent="SpendLayer/SpendRoot/SMargin/SVBox" unique_id=1155824360]
+unique_name_in_owner = true
+layout_mode = 2
+text = "关闭"
+
+[node name="SpendScroll" type="ScrollContainer" parent="SpendLayer/SpendRoot/SMargin/SVBox" unique_id=1935368410]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpendList" type="VBoxContainer" parent="SpendLayer/SpendRoot/SMargin/SVBox/SpendScroll" unique_id=1941831512]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpendResult" type="RichTextLabel" parent="SpendLayer/SpendRoot/SMargin/SVBox" unique_id=1065742352]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="MapLayer" type="CanvasLayer" parent="." unique_id=1854872554]
+unique_name_in_owner = true
+layer = 92
+script = ExtResource("6_map")
+
+[node name="MapPanel" type="Panel" parent="MapLayer" unique_id=1319524331]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 100.0
+offset_right = -20.0
+offset_bottom = -100.0
+
+[node name="MMargin" type="MarginContainer" parent="MapLayer/MapPanel" unique_id=1001902537]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="MVBox" type="VBoxContainer" parent="MapLayer/MapPanel/MMargin" unique_id=1988677907]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="MapHeader" type="HBoxContainer" parent="MapLayer/MapPanel/MMargin/MVBox" unique_id=968537998]
+layout_mode = 2
+
+[node name="MapTitle" type="Label" parent="MapLayer/MapPanel/MMargin/MVBox/MapHeader" unique_id=1502586264]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "选择场所（消耗 30 分钟）"
+
+[node name="MapClose" type="Button" parent="MapLayer/MapPanel/MMargin/MVBox/MapHeader" unique_id=18215495]
+unique_name_in_owner = true
+layout_mode = 2
+text = "关闭"
+
+[node name="LocGrid" type="GridContainer" parent="MapLayer/MapPanel/MMargin/MVBox" unique_id=191150823]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14
+columns = 2
+
+[node name="DyingFxLayer" type="CanvasLayer" parent="." unique_id=946110201]
+layer = 96
+
+[node name="DyingOverlay" type="ColorRect" parent="DyingFxLayer" unique_id=1861963243]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_dyfx")
