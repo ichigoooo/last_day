@@ -1,12 +1,19 @@
 [gd_scene format=3 uid="uid://b3vq8m2oaxp1"]
 
 [ext_resource type="Script" uid="uid://ctlrdp7thklp" path="res://scripts/ui/LastDayScreen.cs" id="1_lastday"]
+[ext_resource type="Texture2D" uid="uid://cs0wckiupwrax" path="res://assets/images/新的一天/new_day_bg.png" id="2_6eogj"]
 [ext_resource type="Script" uid="uid://bmtmsxogab3p8" path="res://scripts/ui/StatusBar.cs" id="2_status"]
+[ext_resource type="StyleBox" uid="uid://c2iqnobhxprg4" path="res://resources/ui/styleboxes/sb_card.tres" id="3_0jlge"]
 [ext_resource type="Script" uid="uid://damwgv1f4vxxv" path="res://scripts/ui/ClockArcControl.cs" id="3_clock"]
 [ext_resource type="Script" uid="uid://81ck0lhnyu0d" path="res://scripts/ui/PhoneUI.cs" id="4_phone"]
 [ext_resource type="Script" uid="uid://b57qo107fxhhi" path="res://scripts/ui/DeathSpendUI.cs" id="5_spend"]
+[ext_resource type="StyleBox" uid="uid://dy3mmbc784o71" path="res://resources/ui/styleboxes/sb_choice_generic.tres" id="6_c3ijl"]
 [ext_resource type="Script" uid="uid://cno58e52sqevt" path="res://scripts/ui/LocationMapOverlay.cs" id="6_map"]
+[ext_resource type="StyleBox" uid="uid://3kaoj8tv0d60" path="res://resources/ui/styleboxes/sb_inputfield.tres" id="7_affo8"]
+[ext_resource type="Texture2D" uid="uid://4wefo74i23aj" path="res://assets/images/commonUI/player_avatar.jpeg" id="7_c3ijl"]
 [ext_resource type="Script" uid="uid://canpxi36m5aa3" path="res://scripts/ui/LastDayDyingFx.cs" id="7_dyfx"]
+[ext_resource type="Texture2D" uid="uid://q2x8bho6rtl5" path="res://assets/images/新的一天/letter.png" id="8_affo8"]
+[ext_resource type="StyleBox" uid="uid://cknrxyvwh0unw" path="res://resources/ui/styleboxes/sb_phone_panel.tres" id="9_cf3ca"]
 
 [node name="Root" type="Control" unique_id=1678223051]
 layout_mode = 3
@@ -17,13 +24,24 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lastday")
 
+[node name="DayBackground" type="TextureRect" parent="." unique_id=144031390]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_6eogj")
+stretch_mode = 5
+
 [node name="BgTint" type="ColorRect" parent="." unique_id=778186663]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-color = Color(0.08, 0.085, 0.1, 0.94)
+color = Color(0.08, 0.085, 0.1, 0.82)
 
 [node name="M" type="MarginContainer" parent="." unique_id=81732851]
 layout_mode = 0
@@ -41,6 +59,7 @@ theme_override_constants/separation = 16
 [node name="StatusBar" type="PanelContainer" parent="M/MainColumn" unique_id=8827303]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/panel = ExtResource("3_0jlge")
 script = ExtResource("2_status")
 
 [node name="HBox" type="HBoxContainer" parent="M/MainColumn/StatusBar" unique_id=1553790701]
@@ -99,12 +118,20 @@ alignment = 1
 [node name="BtnOpenMap" type="Button" parent="M/MainColumn/Toolbar" unique_id=761515341]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "前往场所"
 
 [node name="BtnEndDialogue" type="Button" parent="M/MainColumn/Toolbar" unique_id=761515342]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "结束对话"
 
 [node name="LocationTitle" type="Label" parent="M/MainColumn/Toolbar" unique_id=102432041]
@@ -119,6 +146,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("3_0jlge")
 
 [node name="VisualRow" type="HBoxContainer" parent="M/MainColumn/MainVisual" unique_id=1876673210]
 unique_name_in_owner = true
@@ -139,6 +167,7 @@ visible = false
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 3
+texture = ExtResource("7_c3ijl")
 expand_mode = 1
 stretch_mode = 5
 
@@ -149,6 +178,16 @@ theme_override_colors/font_color = Color(0.62, 0.66, 0.74, 1)
 theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="LetterDecor" type="TextureRect" parent="M/MainColumn" unique_id=935217717]
+modulate = Color(1, 1, 1, 0.42)
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+texture = ExtResource("8_affo8")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="SummaryLabel" type="Label" parent="M/MainColumn" unique_id=786985247]
 unique_name_in_owner = true
@@ -182,6 +221,10 @@ visible = false
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 autowrap_mode = 3
 
 [node name="OptionButton2" type="Button" parent="M/MainColumn/OptionsColumn" unique_id=1813515156]
@@ -190,6 +233,10 @@ visible = false
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 autowrap_mode = 3
 
 [node name="OptionButton3" type="Button" parent="M/MainColumn/OptionsColumn" unique_id=1605149589]
@@ -198,6 +245,10 @@ visible = false
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 autowrap_mode = 3
 
 [node name="OptionCustom" type="Label" parent="M/MainColumn" unique_id=1723402432]
@@ -222,11 +273,16 @@ color = Color(0.2, 0.22, 0.28, 1)
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("7_affo8")
 placeholder_text = "用一句话说出此刻想做的事…"
 
 [node name="SubmitButton" type="Button" parent="M/MainColumn/InputRow" unique_id=456980554]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "行动"
 
 [node name="PhoneToast" type="Label" parent="M/MainColumn" unique_id=2138488598]
@@ -244,11 +300,19 @@ alignment = 1
 [node name="BtnOpenPhone" type="Button" parent="M/MainColumn/ToolRow" unique_id=624430169]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "手机"
 
 [node name="BtnOpenSpend" type="Button" parent="M/MainColumn/ToolRow" unique_id=780172522]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "死神花钱"
 
 [node name="NavRow" type="HBoxContainer" parent="M/MainColumn" unique_id=55540391]
@@ -259,11 +323,19 @@ alignment = 1
 [node name="BackButton" type="Button" parent="M/MainColumn/NavRow" unique_id=59416131]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "返回主菜单"
 
 [node name="NextButton" type="Button" parent="M/MainColumn/NavRow" unique_id=1150207928]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "下一阶段"
 
 [node name="PhoneLayer" type="CanvasLayer" parent="." unique_id=968657411]
@@ -280,6 +352,7 @@ offset_left = 24.0
 offset_top = 80.0
 offset_right = -24.0
 offset_bottom = -80.0
+theme_override_styles/panel = ExtResource("9_cf3ca")
 
 [node name="PMargin" type="MarginContainer" parent="PhoneLayer/PhoneRoot" unique_id=1538598681]
 layout_mode = 0
@@ -297,6 +370,10 @@ theme_override_constants/separation = 14
 [node name="PhoneClose" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=558294105]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "关闭"
 
 [node name="PhoneChat" type="RichTextLabel" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=1285457654]
@@ -308,16 +385,25 @@ size_flags_vertical = 3
 [node name="PhoneSendInput" type="LineEdit" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=965137091]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("7_affo8")
 placeholder_text = "发一条消息…"
 
 [node name="PhoneSendBtn" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=1255362654]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "发送"
 
 [node name="PowerBankBtn" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=582291962]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "充电宝（约 1 小时游戏时间）"
 
 [node name="PhoneHint" type="Label" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=332946054]
@@ -334,11 +420,16 @@ text = "朋友圈"
 [node name="MomentsInput" type="LineEdit" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=275678415]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("7_affo8")
 placeholder_text = "发一条朋友圈…"
 
 [node name="MomentsPost" type="Button" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=476642425]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "发布"
 
 [node name="MomentsList" type="ItemList" parent="PhoneLayer/PhoneRoot/PMargin/PVBox" unique_id=1969700381]
@@ -360,6 +451,7 @@ offset_left = 32.0
 offset_top = 120.0
 offset_right = -32.0
 offset_bottom = -120.0
+theme_override_styles/panel = ExtResource("3_0jlge")
 
 [node name="SMargin" type="MarginContainer" parent="SpendLayer/SpendRoot" unique_id=641982004]
 layout_mode = 0
@@ -377,6 +469,10 @@ theme_override_constants/separation = 14
 [node name="SpendClose" type="Button" parent="SpendLayer/SpendRoot/SMargin/SVBox" unique_id=1155824360]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "关闭"
 
 [node name="SpendScroll" type="ScrollContainer" parent="SpendLayer/SpendRoot/SMargin/SVBox" unique_id=1935368410]
@@ -406,6 +502,7 @@ offset_left = 20.0
 offset_top = 100.0
 offset_right = -20.0
 offset_bottom = -100.0
+theme_override_styles/panel = ExtResource("3_0jlge")
 
 [node name="MMargin" type="MarginContainer" parent="MapLayer/MapPanel" unique_id=1001902537]
 layout_mode = 0
@@ -432,6 +529,10 @@ text = "选择场所（消耗 30 分钟）"
 [node name="MapClose" type="Button" parent="MapLayer/MapPanel/MMargin/MVBox/MapHeader" unique_id=18215495]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("6_c3ijl")
+theme_override_styles/pressed = ExtResource("6_c3ijl")
+theme_override_styles/hover = ExtResource("6_c3ijl")
+theme_override_styles/disabled = ExtResource("6_c3ijl")
 text = "关闭"
 
 [node name="LocGrid" type="GridContainer" parent="MapLayer/MapPanel/MMargin/MVBox" unique_id=191150823]

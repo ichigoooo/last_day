@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://c9wk1m3n8yq2"]
+[gd_scene format=3 uid="uid://dawk1m3n8yq2"]
 
-[ext_resource type="Script" path="res://scripts/ui/DeathScreen.cs" id="1_death"]
+[ext_resource type="Script" uid="uid://5caqu3fcfxxc" path="res://scripts/ui/DeathScreen.cs" id="1_death"]
+[ext_resource type="Texture2D" uid="uid://by4l6w0janipo" path="res://assets/images/commonUI/death.jpeg" id="2_w8wr1"]
 
-[node name="Root" type="Control"]
+[node name="Root" type="Control" unique_id=1703969842]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,3 +11,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_death")
+
+[node name="PhaseBackground" type="TextureRect" parent="." unique_id=691208930]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_w8wr1")
+stretch_mode = 5

@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://tmitl3ytf5hy"]
+[gd_scene format=3 uid="uid://tmitl3ytf5hy"]
 
-[ext_resource type="Script" path="res://scripts/ui/DeathRegistrationScreen.cs" id="1_dr"]
-[ext_resource type="Script" path="res://scripts/ui/TypewriterLabel.cs" id="2_tw"]
+[ext_resource type="Script" uid="uid://dyoqqwv0fmsle" path="res://scripts/ui/DeathRegistrationScreen.cs" id="1_dr"]
+[ext_resource type="Script" uid="uid://dc3xr4yn2lo7" path="res://scripts/ui/TypewriterLabel.cs" id="2_tw"]
+[ext_resource type="Texture2D" uid="uid://cbx4fbcu64lou" path="res://assets/images/入殓室/prelude_bg.png" id="2_wwosy"]
+[ext_resource type="StyleBox" uid="uid://c2iqnobhxprg4" path="res://resources/ui/styleboxes/sb_card.tres" id="3_oeqnd"]
+[ext_resource type="StyleBox" uid="uid://3kaoj8tv0d60" path="res://resources/ui/styleboxes/sb_inputfield.tres" id="4_nonl3"]
 
-[node name="Root" type="Control"]
+[node name="Root2" type="Control" unique_id=795772925]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +15,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_dr")
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="PhaseBackground" type="TextureRect" parent="." unique_id=1701395120]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_wwosy")
+stretch_mode = 5
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=509795287]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,100 +38,104 @@ theme_override_constants/margin_top = 28
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 24
 
-[node name="MainCol" type="VBoxContainer" parent="Margin"]
+[node name="MainCol" type="VBoxContainer" parent="Margin" unique_id=1992720537]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="TitleLabel" type="Label" parent="Margin/MainCol"]
+[node name="TitleLabel" type="Label" parent="Margin/MainCol" unique_id=1431274696]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "入殓登记"
 horizontal_alignment = 1
 
-[node name="FormBlock" type="PanelContainer" parent="Margin/MainCol"]
+[node name="FormBlock" type="PanelContainer" parent="Margin/MainCol" unique_id=1108243926]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("3_oeqnd")
 
-[node name="FormVBox" type="VBoxContainer" parent="Margin/MainCol/FormBlock"]
+[node name="FormVBox" type="VBoxContainer" parent="Margin/MainCol/FormBlock" unique_id=1369882523]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Scroll" type="ScrollContainer" parent="Margin/MainCol/FormBlock/FormVBox"]
+[node name="Scroll" type="ScrollContainer" parent="Margin/MainCol/FormBlock/FormVBox" unique_id=1492815939]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="Fields" type="VBoxContainer" parent="Margin/MainCol/FormBlock/FormVBox/Scroll"]
+[node name="Fields" type="VBoxContainer" parent="Margin/MainCol/FormBlock/FormVBox/Scroll" unique_id=800319123]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="L1" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+[node name="L1" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields" unique_id=2022394784]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "工作与生存"
 
-[node name="WorkEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+[node name="WorkEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields" unique_id=175726750]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_vertical = 0
+theme_override_styles/normal = ExtResource("4_nonl3")
 placeholder_text = "写下你与工作、生计、职场相关的真实碎片…"
 
-[node name="L2" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+[node name="L2" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields" unique_id=113002438]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "关系与羁绊"
 
-[node name="RelationEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+[node name="RelationEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields" unique_id=2139565005]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_vertical = 0
+theme_override_styles/normal = ExtResource("4_nonl3")
 placeholder_text = "家人、恋人、朋友……谁还在你的通讯录里发烫？"
 
-[node name="L3" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+[node name="L3" type="Label" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields" unique_id=2083268272]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "逃避与自我"
 
-[node name="EscapeEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields"]
+[node name="EscapeEdit" type="TextEdit" parent="Margin/MainCol/FormBlock/FormVBox/Scroll/Fields" unique_id=1788593164]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_vertical = 0
+theme_override_styles/normal = ExtResource("4_nonl3")
 placeholder_text = "你用什么麻醉自己？又在躲什么？"
 
-[node name="SubmitButton" type="Button" parent="Margin/MainCol/FormBlock/FormVBox"]
+[node name="SubmitButton" type="Button" parent="Margin/MainCol/FormBlock/FormVBox" unique_id=1840574664]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "提交登记"
 
-[node name="StatusLabel" type="Label" parent="Margin/MainCol"]
+[node name="StatusLabel" type="Label" parent="Margin/MainCol" unique_id=1004726174]
 unique_name_in_owner = true
 layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="AnnotationBlock" type="VBoxContainer" parent="Margin/MainCol"]
+[node name="AnnotationBlock" type="VBoxContainer" parent="Margin/MainCol" unique_id=77681593]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="AnnTitle" type="Label" parent="Margin/MainCol/AnnotationBlock"]
+[node name="AnnTitle" type="Label" parent="Margin/MainCol/AnnotationBlock" unique_id=61230667]
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "死神批注"
 horizontal_alignment = 1
 
-[node name="AnnotationTypewriter" type="Label" parent="Margin/MainCol/AnnotationBlock"]
+[node name="AnnotationTypewriter" type="Label" parent="Margin/MainCol/AnnotationBlock" unique_id=173646826]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 148)
 layout_mode = 2
@@ -125,23 +143,23 @@ size_flags_vertical = 3
 autowrap_mode = 3
 script = ExtResource("2_tw")
 
-[node name="AnnButtons" type="HBoxContainer" parent="Margin/MainCol/AnnotationBlock"]
+[node name="AnnButtons" type="HBoxContainer" parent="Margin/MainCol/AnnotationBlock" unique_id=600362454]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 20
+alignment = 1
 
-[node name="SkipTypingButton" type="Button" parent="Margin/MainCol/AnnotationBlock/AnnButtons"]
+[node name="SkipTypingButton" type="Button" parent="Margin/MainCol/AnnotationBlock/AnnButtons" unique_id=1059957981]
 unique_name_in_owner = true
 layout_mode = 2
 text = "跳过打字"
 
-[node name="ContinueVerdictButton" type="Button" parent="Margin/MainCol/AnnotationBlock/AnnButtons"]
+[node name="ContinueVerdictButton" type="Button" parent="Margin/MainCol/AnnotationBlock/AnnButtons" unique_id=1189017406]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 text = "前往宣判"
 
-[node name="BackButton" type="Button" parent="Margin/MainCol"]
+[node name="BackButton" type="Button" parent="Margin/MainCol" unique_id=1554169871]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

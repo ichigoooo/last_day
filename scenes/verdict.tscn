@@ -1,8 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://dh7k2n1w4xq0"]
+[gd_scene format=3 uid="uid://dh7k2n1w4xq0"]
 
-[ext_resource type="Script" path="res://scripts/ui/VerdictScreen.cs" id="1_v"]
+[ext_resource type="Script" uid="uid://0r5amr2ic3p8" path="res://scripts/ui/VerdictScreen.cs" id="1_v"]
+[ext_resource type="Texture2D" uid="uid://1i4hhcbc2ivh" path="res://assets/images/宣判法庭/court.png" id="2_f3cr2"]
+[ext_resource type="StyleBox" uid="uid://c2iqnobhxprg4" path="res://resources/ui/styleboxes/sb_card.tres" id="3_een07"]
+[ext_resource type="StyleBox" uid="uid://3kaoj8tv0d60" path="res://resources/ui/styleboxes/sb_inputfield.tres" id="4_d7ssr"]
+[ext_resource type="StyleBox" uid="uid://dy3mmbc784o71" path="res://resources/ui/styleboxes/sb_choice_generic.tres" id="5_iwura"]
 
-[node name="Root" type="Control"]
+[node name="Root2" type="Control" unique_id=1356872577]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +15,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_v")
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="PhaseBackground" type="TextureRect" parent="." unique_id=1239913027]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_f3cr2")
+stretch_mode = 5
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1675266189]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,63 +38,65 @@ theme_override_constants/margin_top = 44
 theme_override_constants/margin_right = 36
 theme_override_constants/margin_bottom = 44
 
-[node name="Outer" type="VBoxContainer" parent="Margin"]
+[node name="Outer" type="VBoxContainer" parent="Margin" unique_id=655491571]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 22
 
-[node name="TitleLabel" type="Label" parent="Margin/Outer"]
+[node name="TitleLabel" type="Label" parent="Margin/Outer" unique_id=1467369252]
 layout_mode = 2
 theme_override_font_sizes/font_size = 36
 text = "死因宣判"
 horizontal_alignment = 1
 
-[node name="PaperPanel" type="PanelContainer" parent="Margin/Outer"]
+[node name="PaperPanel" type="PanelContainer" parent="Margin/Outer" unique_id=392761810]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("3_een07")
 
-[node name="Inner" type="VBoxContainer" parent="Margin/Outer/PaperPanel"]
+[node name="Inner" type="VBoxContainer" parent="Margin/Outer/PaperPanel" unique_id=927469044]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="H1" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="H1" type="Label" parent="Margin/Outer/PaperPanel/Inner" unique_id=688385511]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "裁定死因"
 horizontal_alignment = 1
 
-[node name="DeathCauseLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="DeathCauseLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner" unique_id=1681990726]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 autowrap_mode = 3
 
-[node name="H2" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="H2" type="Label" parent="Margin/Outer/PaperPanel/Inner" unique_id=1518890727]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "死神开场白"
 horizontal_alignment = 1
 
-[node name="OpeningLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="OpeningLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner" unique_id=172261384]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 autowrap_mode = 3
 
-[node name="H3" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="H3" type="Label" parent="Margin/Outer/PaperPanel/Inner" unique_id=1119078643]
 layout_mode = 2
 text = "最后一天遗愿（可自填）"
 horizontal_alignment = 1
 
-[node name="WishEdit" type="TextEdit" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="WishEdit" type="TextEdit" parent="Margin/Outer/PaperPanel/Inner" unique_id=807245019]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+theme_override_styles/normal = ExtResource("4_d7ssr")
 placeholder_text = "写下一句你想完成的事…"
 
-[node name="WishHintLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="WishHintLabel" type="Label" parent="Margin/Outer/PaperPanel/Inner" unique_id=563841431]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -87,47 +104,71 @@ theme_override_colors/font_color = Color(0.65, 0.35, 0.35, 1)
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="SuggestButton" type="Button" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="SuggestButton" type="Button" parent="Margin/Outer/PaperPanel/Inner" unique_id=1529192585]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("5_iwura")
+theme_override_styles/pressed = ExtResource("5_iwura")
+theme_override_styles/hover = ExtResource("5_iwura")
+theme_override_styles/disabled = ExtResource("5_iwura")
 text = "没有想法 · 生成三条建议"
 
-[node name="SuggestionRow" type="HBoxContainer" parent="Margin/Outer/PaperPanel/Inner"]
+[node name="SuggestionRow" type="HBoxContainer" parent="Margin/Outer/PaperPanel/Inner" unique_id=127862877]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 12
-
-[node name="WishSuggest1" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-autowrap_mode = 3
-
-[node name="WishSuggest2" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-autowrap_mode = 3
-
-[node name="WishSuggest3" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-autowrap_mode = 3
-
-[node name="BottomRow" type="HBoxContainer" parent="Margin/Outer"]
-layout_mode = 2
 alignment = 1
-theme_override_constants/separation = 28
 
-[node name="ConfirmButton" type="Button" parent="Margin/Outer/BottomRow"]
+[node name="WishSuggest1" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow" unique_id=1653759100]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("5_iwura")
+theme_override_styles/pressed = ExtResource("5_iwura")
+theme_override_styles/hover = ExtResource("5_iwura")
+theme_override_styles/disabled = ExtResource("5_iwura")
+autowrap_mode = 3
+
+[node name="WishSuggest2" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow" unique_id=923971833]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("5_iwura")
+theme_override_styles/pressed = ExtResource("5_iwura")
+theme_override_styles/hover = ExtResource("5_iwura")
+theme_override_styles/disabled = ExtResource("5_iwura")
+autowrap_mode = 3
+
+[node name="WishSuggest3" type="Button" parent="Margin/Outer/PaperPanel/Inner/SuggestionRow" unique_id=1413999638]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("5_iwura")
+theme_override_styles/pressed = ExtResource("5_iwura")
+theme_override_styles/hover = ExtResource("5_iwura")
+theme_override_styles/disabled = ExtResource("5_iwura")
+autowrap_mode = 3
+
+[node name="BottomRow" type="HBoxContainer" parent="Margin/Outer" unique_id=157568568]
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="Margin/Outer/BottomRow" unique_id=1146643484]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("5_iwura")
+theme_override_styles/pressed = ExtResource("5_iwura")
+theme_override_styles/hover = ExtResource("5_iwura")
+theme_override_styles/disabled = ExtResource("5_iwura")
 text = "确认遗愿 · 进入最后一天"
 
-[node name="BackButton" type="Button" parent="Margin/Outer/BottomRow"]
+[node name="BackButton" type="Button" parent="Margin/Outer/BottomRow" unique_id=368689575]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/normal = ExtResource("5_iwura")
+theme_override_styles/pressed = ExtResource("5_iwura")
+theme_override_styles/hover = ExtResource("5_iwura")
+theme_override_styles/disabled = ExtResource("5_iwura")
 text = "返回主菜单"
